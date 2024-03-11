@@ -28,7 +28,7 @@ export async function retrieveDataById(collectionName: string, id: string) {
   return data;
 }
 
-export async function signUp(
+export async function register(
   userData: {
     email: string;
     fullname: string;

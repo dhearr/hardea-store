@@ -4,12 +4,12 @@ import { FormEvent, useState } from "react";
 import { HiOutlineKey, HiOutlineMail } from "react-icons/hi";
 import { HiDevicePhoneMobile, HiOutlineUser } from "react-icons/hi2";
 
-const SignUpView = () => {
+const RegisterView = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
   const { push } = useRouter();
 
-  const handleSingUp = async (event: FormEvent<HTMLFormElement>) => {
+  const handleRegister = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setIsLoading(true);
     setError("");
@@ -21,7 +21,7 @@ const SignUpView = () => {
       password: form.password.value,
     };
 
-    const result = await fetch("/api/users/signup", {
+    const result = await fetch("/api/users/register", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -32,7 +32,7 @@ const SignUpView = () => {
     if (result.status === 200) {
       form.reset();
       setIsLoading(false);
-      push("/auth/signin");
+      push("/auth/login");
     } else {
       setIsLoading(false);
       setError("Email already exist");
@@ -45,10 +45,10 @@ const SignUpView = () => {
         <div className="w-full bg-white rounded-lg border shadow-lg md:mt-0 sm:max-w-md xl:p-0">
           <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
             <h1 className="text-xl text-center font-bold leading-tight tracking-tight text-black/80 md:text-2xl">
-              Sign up for your account
+              Register for your account
             </h1>
             <hr />
-            <form className="space-y-4 md:space-y-6" onSubmit={handleSingUp}>
+            <form className="space-y-4 md:space-y-6" onSubmit={handleRegister}>
               <div>
                 <label className="input input-bordered bg-slate-50 text-black/70 flex items-center gap-2">
                   <HiOutlineUser />
@@ -109,7 +109,7 @@ const SignUpView = () => {
                 {isLoading ? (
                   <span className="loading loading-spinner loading-sm"></span>
                 ) : (
-                  "Sign Up"
+                  "Register"
                 )}
               </button>
             </form>
@@ -117,8 +117,8 @@ const SignUpView = () => {
         </div>
         <p className="text-black/60 mt-5">
           already have an account?{" "}
-          <Link href="/auth/signin" className="text-blue-500 hover:underline">
-            Sign In
+          <Link href="/auth/login" className="text-blue-500 hover:underline">
+            Login
           </Link>
         </p>
       </div>
@@ -126,4 +126,4 @@ const SignUpView = () => {
   );
 };
 
-export default SignUpView;
+export default RegisterView;
