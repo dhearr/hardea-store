@@ -1,41 +1,40 @@
+import { signIn } from "next-auth/react";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { FormEvent, useState } from "react";
 import { HiOutlineKey, HiOutlineMail } from "react-icons/hi";
-import { HiDevicePhoneMobile, HiOutlineUser } from "react-icons/hi2";
 
-const RegisterView = () => {
+const LoginView = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
-  const { push } = useRouter();
+  const { push, query } = useRouter();
 
-  const handleRegister = async (event: FormEvent<HTMLFormElement>) => {
+  const callbackUrl: any = query.callbackUrl || "/";
+
+  const handleLogin = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setIsLoading(true);
     setError("");
     const form = event.target as HTMLFormElement;
-    const data = {
-      fullname: form.fullname.value,
-      email: form.email.value,
-      phone: form.phone.value,
-      password: form.password.value,
-    };
+    try {
+      const res = await signIn("credentials", {
+        redirect: false,
+        email: form.email.value,
+        password: form.password.value,
+        callbackUrl,
+      });
 
-    const result = await fetch("/api/users/register", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(data),
-    });
-
-    if (result.status === 200) {
-      form.reset();
+      if (!res?.error) {
+        form.reset();
+        setIsLoading(false);
+        push(callbackUrl);
+      } else {
+        setIsLoading(false);
+        setError("Email or password is incorrect");
+      }
+    } catch (error) {
       setIsLoading(false);
-      push("/auth/login");
-    } else {
-      setIsLoading(false);
-      setError("Email already exist");
+      setError("Email or password is incorrect");
     }
   };
 
@@ -45,22 +44,10 @@ const RegisterView = () => {
         <div className="w-full bg-white rounded-lg border shadow-lg md:mt-0 sm:max-w-md xl:p-0">
           <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
             <h1 className="text-xl text-center font-bold leading-tight tracking-tight text-black/80 md:text-2xl">
-              Register for your account
+              Login to your account
             </h1>
             <hr />
-            <form className="space-y-4 md:space-y-6" onSubmit={handleRegister}>
-              <div>
-                <label className="input input-bordered bg-slate-50 text-black/70 flex items-center gap-2">
-                  <HiOutlineUser />
-                  <input
-                    id="fullname"
-                    name="fullname"
-                    type="text"
-                    className="grow placeholder:text-black/70"
-                    placeholder="Fullname"
-                  />
-                </label>
-              </div>
+            <form className="space-y-4 md:space-y-6" onSubmit={handleLogin}>
               <div>
                 <label className="input input-bordered bg-slate-50 text-black/70 flex items-center gap-2">
                   <HiOutlineMail />
@@ -70,18 +57,6 @@ const RegisterView = () => {
                     type="text"
                     className="grow placeholder:text-black/70"
                     placeholder="Email"
-                  />
-                </label>
-              </div>
-              <div>
-                <label className="input input-bordered bg-slate-50 text-black/70 flex items-center gap-2">
-                  <HiDevicePhoneMobile />
-                  <input
-                    id="phone"
-                    name="phone"
-                    type="text"
-                    className="grow placeholder:text-black/70"
-                    placeholder="Phone Number"
                   />
                 </label>
               </div>
@@ -109,16 +84,16 @@ const RegisterView = () => {
                 {isLoading ? (
                   <span className="loading loading-spinner loading-sm"></span>
                 ) : (
-                  "Register"
+                  "Login"
                 )}
               </button>
             </form>
           </div>
         </div>
         <p className="text-black/60 mt-5">
-          already have an account?{" "}
-          <Link href="/auth/login" className="text-blue-500 hover:underline">
-            Login
+          Don&apos;t have an account?{" "}
+          <Link href="/auth/register" className="text-blue-500 hover:underline">
+            Register
           </Link>
         </p>
       </div>
@@ -126,4 +101,4 @@ const RegisterView = () => {
   );
 };
 
-export default RegisterView;
+export default LoginView;
