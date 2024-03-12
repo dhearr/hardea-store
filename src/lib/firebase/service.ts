@@ -94,3 +94,37 @@ export async function login(email: string) {
     return null; // Jika tidak ada data yang ditemukan, kembalikan null
   }
 }
+
+export async function loginWithGoogle(data: any, callback: Function) {
+  const q = query(
+    collection(firestore, "users"), // Mengambil referensi koleksi "users"
+    where("email", "==", data.email) // Menambahkan kondisi bahwa email harus sama dengan email yang diberikan
+  );
+
+  const snapshot = await getDocs(q); // Mendapatkan snapshot dari hasil query
+  const user = snapshot.docs.map((doc) => ({
+    id: doc.id, // Mengambil ID dokumen
+    ...doc.data(), // Mengambil data dari dokumen
+  }));
+
+  // Memeriksa apakah pengguna sudah terdaftar berdasarkan hasil query
+  if (user.length > 0) {
+    // Jika pengguna sudah terdaftar, memanggil callback dengan data pengguna yang ditemukan
+    callback(user[0]);
+  } else {
+    // Jika pengguna belum terdaftar
+    // Menetapkan peran (role) default sebagai "member" untuk data pengguna yang baru
+    data.role = "member";
+
+    // Menambahkan data pengguna baru ke koleksi pengguna di firestore
+    await addDoc(collection(firestore, "users"), data)
+      .then(() => {
+        // Jika penambahan data berhasil, memanggil callback dengan data pengguna yang baru ditambahkan
+        callback(data);
+      })
+      .catch((error) => {
+        // Menangani kesalahan jika terjadi error saat menambahkan data pengguna
+        console.log(error);
+      });
+  }
+}

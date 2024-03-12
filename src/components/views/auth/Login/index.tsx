@@ -1,4 +1,5 @@
 import { signIn } from "next-auth/react";
+import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { FormEvent, useState } from "react";
@@ -77,7 +78,6 @@ const LoginView = () => {
                   />
                 </label>
               </div>
-              <hr />
               {/* Pesan error */}
               {error && (
                 <p className="text-red-500 text-sm text-center">{error}</p>
@@ -85,7 +85,7 @@ const LoginView = () => {
               <button
                 disabled={isLoading}
                 type="submit"
-                className="w-full p-2.5 rounded-lg bg-green-600 hover:bg-green-700 text-white"
+                className="w-full p-2.5 rounded-lg bg-green-700 hover:bg-green-600 text-white"
               >
                 {/* Tampilan tombol saat loading */}
                 {isLoading ? (
@@ -94,7 +94,25 @@ const LoginView = () => {
                   "Login"
                 )}
               </button>
+              <hr />
             </form>
+            {/* Tombol login dengan Google */}
+            <button
+              type="button"
+              className="w-full flex items-center justify-center p-2.5 rounded-lg bg-blue-700 hover:bg-blue-600 text-white"
+              onClick={() => signIn("google", { callbackUrl, redirect: false })}
+            >
+              <span className="inline-flex">
+                <Image
+                  src="/images/google.png"
+                  alt="google"
+                  className="w-6 h-6 mr-3"
+                  width={200}
+                  height={200}
+                />
+              </span>
+              Login with Google
+            </button>
           </div>
         </div>
         <p className="text-black/60 mt-5">

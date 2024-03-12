@@ -1,8 +1,9 @@
-import { login } from "@/lib/firebase/service";
+import { login, loginWithGoogle } from "@/lib/firebase/service";
 import { compare } from "bcrypt";
 import { NextAuthOptions } from "next-auth";
 import NextAuth from "next-auth/next";
 import CredentialsProvider from "next-auth/providers/credentials";
+import GoogleProvider from "next-auth/providers/google";
 
 // Opsi konfigurasi NextAuth
 const authOptions: NextAuthOptions = {
@@ -38,6 +39,10 @@ const authOptions: NextAuthOptions = {
         }
       },
     }),
+    GoogleProvider({
+      clientId: process.env.GOOGLE_OAUTH_CLIENT_ID || "",
+      clientSecret: process.env.GOOGLE_OAUTH_CLIENT_SECRET || "",
+    }),
   ],
   callbacks: {
     async jwt({ token, account, profile, user }: any) {
@@ -47,6 +52,23 @@ const authOptions: NextAuthOptions = {
         token.fullname = user.fullname; // Menambahkan fullname ke token
         token.phone = user.phone; // Menambahkan phone ke token
         token.role = user.role; // Menambahkan role ke token
+      }
+
+      if (account?.provider === "google") {
+        // Jika autentikasi dilakukan melalui Google
+        const data = {
+          fullname: user.name, // Mengambil nama lengkap dari user yang didapatkan dari Google
+          email: user.email, // Mengambil alamat email dari user yang didapatkan dari Google
+          type: "google", // Menentukan tipe autentikasi sebagai Google
+        };
+
+        // Memanggil fungsi loginWithGoogle untuk menangani autentikasi melalui Google
+        await loginWithGoogle(data, (data: any) => {
+          // Jika autentikasi berhasil, mengatur token dengan data yang diperoleh
+          token.email = data.email; // Menambahkan alamat email ke token
+          token.fullname = data.fullname; // Menambahkan nama lengkap ke token
+          token.role = data.role; // Menambahkan peran (role) ke token
+        });
       }
       return token; // Mengembalikan token
     },
