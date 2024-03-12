@@ -1,5 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import { register } from "@/lib/firebase/service";
+import { register } from "@/services/auth";
 
 // Fungsi handler untuk menangani permintaan API
 export default async function handler(

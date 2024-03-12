@@ -1,3 +1,5 @@
+import Button from "@/components/ui/Button";
+import Input from "@/components/ui/Input";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { FormEvent, useState } from "react";
@@ -51,65 +53,43 @@ const RegisterView = () => {
             <h1 className="text-xl text-center font-bold leading-tight tracking-tight text-black/80 md:text-2xl">
               Register for your account
             </h1>
-            <hr />
             <form className="space-y-4 md:space-y-6" onSubmit={handleRegister}>
-              <div>
-                <label className="input input-bordered bg-slate-50 text-black/70 flex items-center gap-2">
-                  <HiOutlineUser />
-                  <input
-                    id="fullname"
-                    name="fullname"
-                    type="text"
-                    className="grow placeholder:text-black/70"
-                    placeholder="Fullname"
-                  />
-                </label>
-              </div>
-              <div>
-                <label className="input input-bordered bg-slate-50 text-black/70 flex items-center gap-2">
-                  <HiOutlineMail />
-                  <input
-                    id="email"
-                    name="email"
-                    type="text"
-                    className="grow placeholder:text-black/70"
-                    placeholder="Email"
-                  />
-                </label>
-              </div>
-              <div>
-                <label className="input input-bordered bg-slate-50 text-black/70 flex items-center gap-2">
-                  <HiDevicePhoneMobile />
-                  <input
-                    id="phone"
-                    name="phone"
-                    type="text"
-                    className="grow placeholder:text-black/70"
-                    placeholder="Phone Number"
-                  />
-                </label>
-              </div>
-              <div>
-                <label className="input input-bordered bg-slate-50 text-black/70 flex items-center gap-2">
-                  <HiOutlineKey />
-                  <input
-                    id="password"
-                    name="password"
-                    type="password"
-                    className="grow placeholder:text-black/70"
-                    placeholder="Password"
-                  />
-                </label>
-              </div>
-              <hr />
+              <Input
+                label={<HiOutlineUser />}
+                name="fullname"
+                type="fullname"
+                placeholder="Fullname"
+                required
+              />
+              <Input
+                label={<HiOutlineMail />}
+                name="email"
+                type="email"
+                placeholder="Email"
+                required
+              />
+              <Input
+                label={<HiDevicePhoneMobile />}
+                name="phone"
+                type="phone"
+                placeholder="Phone Number"
+                required
+              />
+              <Input
+                label={<HiOutlineKey />}
+                name="password"
+                type="password"
+                placeholder="Password"
+                required
+              />
               {/* Pesan error */}
               {error && (
                 <p className="text-red-500 text-sm text-center">{error}</p>
               )}
-              <button
+              <Button
                 disabled={isLoading}
                 type="submit"
-                className="w-full p-2.5 rounded-lg bg-green-600 hover:bg-green-700 text-white"
+                variant="w-full p-2.5 rounded-lg bg-green-600 hover:bg-green-700 text-white"
               >
                 {/* Tampilan tombol saat loading */}
                 {isLoading ? (
@@ -117,12 +97,12 @@ const RegisterView = () => {
                 ) : (
                   "Register"
                 )}
-              </button>
+              </Button>
             </form>
           </div>
         </div>
         <p className="text-black/60 mt-5">
-          already have an account?{" "}
+          Already have an account?{" "}
           <Link href="/auth/login" className="text-blue-500 hover:underline">
             Login
           </Link>

@@ -1,5 +1,5 @@
 import {
-  addDoc, // Fungsi untuk menambahkan dokumen baru ke koleksi
+  addDoc, // Fungsi untuk menambahkan data ke koleksi
   collection, // Fungsi untuk mendapatkan referensi ke koleksi
   doc, // Fungsi untuk mendapatkan referensi ke dokumen
   getDoc, // Fungsi untuk mendapatkan dokumen tunggal
@@ -9,7 +9,6 @@ import {
   where, // Fungsi untuk menentukan kondisi pada query
 } from "firebase/firestore";
 import app from "./init";
-import bcrypt from "bcrypt"; // Import modul bcrypt untuk hashing password
 
 // Mendapatkan instance Firestore
 const firestore = getFirestore(app);
@@ -31,101 +30,41 @@ export async function retrieveDataById(collectionName: string, id: string) {
   return data; // Mengembalikan data
 }
 
-// Fungsi untuk melakukan registrasi pengguna baru
-export async function register(
-  userData: {
-    email: string;
-    fullname: string;
-    phone: string;
-    password: string;
-    role?: string;
-  },
-  callback: Function // Callback untuk menangani hasil operasi
+// Fungsi untuk mengambil data dari koleksi Firestore berdasarkan nilai tertentu dari sebuah field.
+export async function retrieveDataByField(
+  collectionName: string,
+  field: string,
+  value: string
 ) {
+  // Membuat query Firestore untuk mendapatkan dokumen berdasarkan field dan nilai yang diberikan
   const q = query(
-    collection(firestore, "users"), // Mengambil referensi koleksi "users"
-    where("email", "==", userData.email) // Menambahkan kondisi bahwa email harus sama dengan email yang diberikan
+    collection(firestore, collectionName),
+    where(field, "==", value)
   );
 
-  const snapshot = await getDocs(q); // Mendapatkan snapshot dari hasil query
+  // Mendapatkan snapshot dari hasil query
+  const snapshot = await getDocs(q);
+
+  // Mengambil data dari setiap dokumen dalam snapshot
   const data = snapshot.docs.map((doc) => ({
     id: doc.id, // Mengambil ID dokumen
     ...doc.data(), // Mengambil data dari dokumen
   }));
 
-  if (data.length > 0) {
-    // Jika data ditemukan dengan email yang sama, panggil callback dengan false
-    callback(false);
-  } else {
-    // Jika tidak ada data yang ditemukan, lanjutkan dengan proses registrasi
-    if (!userData.role) {
-      userData.role = "member"; // Jika peran tidak ditentukan, set peran sebagai "member" secara default
-    }
-
-    userData.password = await bcrypt.hash(userData.password, 10); // Hash password sebelum disimpan ke database
-
-    await addDoc(collection(firestore, "users"), userData) // Tambahkan data pengguna baru ke koleksi "users"
-      .then(() => {
-        callback(true); // Panggil callback dengan true untuk menandakan registrasi berhasil
-      })
-      .catch((error) => {
-        callback(false); // Panggil callback dengan false dan log error jika terjadi kesalahan
-        console.log(error);
-      });
-  }
+  return data;
 }
 
-// Fungsi untuk melakukan login
-export async function login(email: string) {
-  const q = query(
-    collection(firestore, "users"), // Mengambil referensi koleksi "users"
-    where("email", "==", email) // Menambahkan kondisi bahwa email harus sama dengan email yang diberikan
-  );
-
-  const snapshot = await getDocs(q); // Mendapatkan snapshot dari hasil query
-  const data = snapshot.docs.map((doc) => ({
-    id: doc.id, // Mengambil ID dokumen
-    ...doc.data(), // Mengambil data dari dokumen
-  }));
-
-  if (data) {
-    return data[0]; // Jika data ditemukan, kembalikan data pertama dari array
-  } else {
-    return null; // Jika tidak ada data yang ditemukan, kembalikan null
-  }
-}
-
-// Fungsi untuk melakukan login dengan akun google
-export async function loginWithGoogle(data: any, callback: Function) {
-  const q = query(
-    collection(firestore, "users"), // Mengambil referensi koleksi "users"
-    where("email", "==", data.email) // Menambahkan kondisi bahwa email harus sama dengan email yang diberikan
-  );
-
-  const snapshot = await getDocs(q); // Mendapatkan snapshot dari hasil query
-  const user = snapshot.docs.map((doc) => ({
-    id: doc.id, // Mengambil ID dokumen
-    ...doc.data(), // Mengambil data dari dokumen
-  }));
-
-  // Memeriksa apakah pengguna sudah terdaftar berdasarkan hasil query
-  if (user.length > 0) {
-    // Jika pengguna sudah terdaftar, memanggil callback dengan data pengguna yang ditemukan
-    callback(user[0]);
-  } else {
-    // Jika pengguna belum terdaftar
-    // Menetapkan peran (role) default sebagai "member" untuk data pengguna yang baru
-    data.role = "member";
-
-    // Menambahkan data pengguna baru ke koleksi pengguna di firestore
-    await addDoc(collection(firestore, "users"), data)
-      .then(() => {
-        // Jika penambahan data berhasil, memanggil callback dengan data pengguna yang baru ditambahkan
-        callback(data);
-      })
-      .catch((error) => {
-        // Menangani kesalahan jika terjadi error saat menambahkan data pengguna
-        console.log(error);
-      });
-  }
+export async function addData(
+  collectionName: string,
+  data: any,
+  callback: Function
+) {
+  await addDoc(collection(firestore, collectionName), data)
+    .then(() => {
+      callback(true);
+    })
+    .catch((error) => {
+      callback(false);
+      console.log(error);
+    });
 }
