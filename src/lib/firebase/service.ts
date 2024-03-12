@@ -95,6 +95,7 @@ export async function login(email: string) {
   }
 }
 
+// Fungsi untuk melakukan login dengan akun google
 export async function loginWithGoogle(data: any, callback: Function) {
   const q = query(
     collection(firestore, "users"), // Mengambil referensi koleksi "users"
