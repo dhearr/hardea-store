@@ -1,6 +1,7 @@
 import { signIn, signOut, useSession } from "next-auth/react";
 
 const Navbar = () => {
+  //! Menggunakan hook useSession untuk mendapatkan data sesi pengguna.
   const { data } = useSession();
 
   return (

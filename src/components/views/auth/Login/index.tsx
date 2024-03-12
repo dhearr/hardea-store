@@ -5,36 +5,41 @@ import { FormEvent, useState } from "react";
 import { HiOutlineKey, HiOutlineMail } from "react-icons/hi";
 
 const LoginView = () => {
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState("");
-  const { push, query } = useRouter();
+  // State untuk menangani loading, error, dan router
+  const [isLoading, setIsLoading] = useState(false); // State untuk menangani status loading
+  const [error, setError] = useState(""); // State untuk menangani pesan error
+  const { push, query } = useRouter(); // Menggunakan hook useRouter untuk mendapatkan informasi tentang router
 
+  // Mendapatkan callbackUrl dari query atau default "/"
   const callbackUrl: any = query.callbackUrl || "/";
 
+  // Fungsi untuk menangani proses login
   const handleLogin = async (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
+    event.preventDefault(); // Mencegah reload halaman saat submit form
     setIsLoading(true);
     setError("");
-    const form = event.target as HTMLFormElement;
+    const form = event.target as HTMLFormElement; // Mengakses form yang sedang di-submit
     try {
+      // Melakukan sign in dengan credential (email dan password)
       const res = await signIn("credentials", {
         redirect: false,
-        email: form.email.value,
-        password: form.password.value,
-        callbackUrl,
+        email: form.email.value, // Mengambil nilai email dari input email
+        password: form.password.value, // Mengambil nilai password dari input password
+        callbackUrl, // Menggunakan callbackUrl yang telah ditentukan
       });
 
+      // Jika tidak terdapat error, reset form dan redirect ke callbackUrl
       if (!res?.error) {
-        form.reset();
+        form.reset(); // Mengosongkan form
         setIsLoading(false);
-        push(callbackUrl);
+        push(callbackUrl); // Redirect ke callbackUrl
       } else {
         setIsLoading(false);
-        setError("Email or password is incorrect");
+        setError("Email or password is incorrect"); // Menetapkan pesan error
       }
     } catch (error) {
       setIsLoading(false);
-      setError("Email or password is incorrect");
+      setError("Email or password is incorrect"); // Menetapkan pesan error
     }
   };
 
@@ -73,6 +78,7 @@ const LoginView = () => {
                 </label>
               </div>
               <hr />
+              {/* Pesan error */}
               {error && (
                 <p className="text-red-500 text-sm text-center">{error}</p>
               )}
@@ -81,6 +87,7 @@ const LoginView = () => {
                 type="submit"
                 className="w-full p-2.5 rounded-lg bg-green-600 hover:bg-green-700 text-white"
               >
+                {/* Tampilan tombol saat loading */}
                 {isLoading ? (
                   <span className="loading loading-spinner loading-sm"></span>
                 ) : (

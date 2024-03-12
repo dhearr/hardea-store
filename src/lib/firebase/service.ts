@@ -1,33 +1,37 @@
 import {
-  addDoc,
-  collection,
-  doc,
-  getDoc,
-  getDocs,
-  getFirestore,
-  query,
-  where,
+  addDoc, // Fungsi untuk menambahkan dokumen baru ke koleksi
+  collection, // Fungsi untuk mendapatkan referensi ke koleksi
+  doc, // Fungsi untuk mendapatkan referensi ke dokumen
+  getDoc, // Fungsi untuk mendapatkan dokumen tunggal
+  getDocs, // Fungsi untuk mendapatkan sekumpulan dokumen
+  getFirestore, // Fungsi untuk mendapatkan instance Firestore
+  query, // Fungsi untuk membuat query
+  where, // Fungsi untuk menentukan kondisi pada query
 } from "firebase/firestore";
 import app from "./init";
-import bcrypt from "bcrypt";
+import bcrypt from "bcrypt"; // Import modul bcrypt untuk hashing password
 
+// Mendapatkan instance Firestore
 const firestore = getFirestore(app);
 
+// Fungsi untuk mengambil semua data dari sebuah koleksi
 export async function retrieveData(collectionName: string) {
-  const snapshot = await getDocs(collection(firestore, collectionName));
+  const snapshot = await getDocs(collection(firestore, collectionName)); // Mengambil snapshot dari koleksi
   const data = snapshot.docs.map((doc) => ({
-    id: doc.id,
-    ...doc.data(),
+    id: doc.id, // Mengambil ID dokumen
+    ...doc.data(), // Mengambil data dari dokumen
   }));
-  return data;
+  return data; // Mengembalikan data
 }
 
+// Fungsi untuk mengambil data berdasarkan ID dari sebuah koleksi
 export async function retrieveDataById(collectionName: string, id: string) {
-  const snapshot = await getDoc(doc(firestore, collectionName, id));
-  const data = snapshot.data();
-  return data;
+  const snapshot = await getDoc(doc(firestore, collectionName, id)); // Mengambil snapshot dari dokumen
+  const data = snapshot.data(); // Mengambil data dari snapshot
+  return data; // Mengembalikan data
 }
 
+// Fungsi untuk melakukan registrasi pengguna baru
 export async function register(
   userData: {
     email: string;
@@ -36,51 +40,57 @@ export async function register(
     password: string;
     role?: string;
   },
-  callback: Function
+  callback: Function // Callback untuk menangani hasil operasi
 ) {
   const q = query(
-    collection(firestore, "users"),
-    where("email", "==", userData.email)
+    collection(firestore, "users"), // Mengambil referensi koleksi "users"
+    where("email", "==", userData.email) // Menambahkan kondisi bahwa email harus sama dengan email yang diberikan
   );
 
-  const snapshot = await getDocs(q);
+  const snapshot = await getDocs(q); // Mendapatkan snapshot dari hasil query
   const data = snapshot.docs.map((doc) => ({
-    id: doc.id,
-    ...doc.data(),
+    id: doc.id, // Mengambil ID dokumen
+    ...doc.data(), // Mengambil data dari dokumen
   }));
 
   if (data.length > 0) {
+    // Jika data ditemukan dengan email yang sama, panggil callback dengan false
     callback(false);
   } else {
+    // Jika tidak ada data yang ditemukan, lanjutkan dengan proses registrasi
     if (!userData.role) {
-      userData.role = "member";
+      userData.role = "member"; // Jika peran tidak ditentukan, set peran sebagai "member" secara default
     }
 
-    userData.password = await bcrypt.hash(userData.password, 10);
+    userData.password = await bcrypt.hash(userData.password, 10); // Hash password sebelum disimpan ke database
 
-    await addDoc(collection(firestore, "users"), userData)
+    await addDoc(collection(firestore, "users"), userData) // Tambahkan data pengguna baru ke koleksi "users"
       .then(() => {
-        callback(true);
+        callback(true); // Panggil callback dengan true untuk menandakan registrasi berhasil
       })
       .catch((error) => {
-        callback(false);
+        callback(false); // Panggil callback dengan false dan log error jika terjadi kesalahan
         console.log(error);
       });
   }
 }
 
+// Fungsi untuk melakukan login
 export async function login(email: string) {
-  const q = query(collection(firestore, "users"), where("email", "==", email));
+  const q = query(
+    collection(firestore, "users"), // Mengambil referensi koleksi "users"
+    where("email", "==", email) // Menambahkan kondisi bahwa email harus sama dengan email yang diberikan
+  );
 
-  const snapshot = await getDocs(q);
+  const snapshot = await getDocs(q); // Mendapatkan snapshot dari hasil query
   const data = snapshot.docs.map((doc) => ({
-    id: doc.id,
-    ...doc.data(),
+    id: doc.id, // Mengambil ID dokumen
+    ...doc.data(), // Mengambil data dari dokumen
   }));
 
   if (data) {
-    return data[0];
+    return data[0]; // Jika data ditemukan, kembalikan data pertama dari array
   } else {
-    return null;
+    return null; // Jika tidak ada data yang ditemukan, kembalikan null
   }
 }

@@ -5,37 +5,41 @@ import { HiOutlineKey, HiOutlineMail } from "react-icons/hi";
 import { HiDevicePhoneMobile, HiOutlineUser } from "react-icons/hi2";
 
 const RegisterView = () => {
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState("");
-  const { push } = useRouter();
+  // State untuk menangani loading, error, dan router
+  const [isLoading, setIsLoading] = useState(false); // State untuk menangani status loading
+  const [error, setError] = useState(""); // State untuk menangani pesan error
+  const { push } = useRouter(); // Menggunakan hook useRouter untuk mendapatkan objek router
 
+  // Fungsi untuk menangani proses registrasi
   const handleRegister = async (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
+    event.preventDefault(); // Mencegah reload halaman saat submit form
     setIsLoading(true);
     setError("");
-    const form = event.target as HTMLFormElement;
+    const form = event.target as HTMLFormElement; // Mengakses form yang sedang di-submit
     const data = {
-      fullname: form.fullname.value,
-      email: form.email.value,
-      phone: form.phone.value,
-      password: form.password.value,
+      fullname: form.fullname.value, // Mengambil nilai fullname dari input fullname
+      email: form.email.value, // Mengambil nilai email dari input email
+      phone: form.phone.value, // Mengambil nilai phone dari input phone
+      password: form.password.value, // Mengambil nilai password dari input password
     };
 
+    // Melakukan fetch ke API untuk registrasi pengguna baru
     const result = await fetch("/api/users/register", {
-      method: "POST",
+      method: "POST", // Metode request POST
       headers: {
-        "Content-Type": "application/json",
+        "Content-Type": "application/json", // Tipe konten JSON
       },
-      body: JSON.stringify(data),
+      body: JSON.stringify(data), // Mengubah objek data menjadi JSON
     });
 
+    // Jika status respons 200, berarti registrasi berhasil
     if (result.status === 200) {
-      form.reset();
+      form.reset(); // Mengosongkan form
       setIsLoading(false);
-      push("/auth/login");
+      push("/auth/login"); // Redirect ke halaman login
     } else {
       setIsLoading(false);
-      setError("Email already exist");
+      setError("Email already exist"); // Menetapkan pesan error
     }
   };
 
@@ -98,6 +102,7 @@ const RegisterView = () => {
                 </label>
               </div>
               <hr />
+              {/* Pesan error */}
               {error && (
                 <p className="text-red-500 text-sm text-center">{error}</p>
               )}
@@ -106,6 +111,7 @@ const RegisterView = () => {
                 type="submit"
                 className="w-full p-2.5 rounded-lg bg-green-600 hover:bg-green-700 text-white"
               >
+                {/* Tampilan tombol saat loading */}
                 {isLoading ? (
                   <span className="loading loading-spinner loading-sm"></span>
                 ) : (
