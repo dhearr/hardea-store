@@ -1,8 +1,8 @@
+import AuthLayout from "@/components/layouts/AuthLayout";
 import Button from "@/components/ui/Button";
 import Input from "@/components/ui/Input";
 import { signIn } from "next-auth/react";
 import Image from "next/image";
-import Link from "next/link";
 import { useRouter } from "next/router";
 import { FormEvent, useState } from "react";
 import { HiOutlineKey, HiOutlineMail } from "react-icons/hi";
@@ -47,73 +47,60 @@ const LoginView = () => {
   };
 
   return (
-    <section className="bg-gray-50 min-h-screen">
-      <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
-        <div className="w-full bg-white rounded-lg border shadow-lg md:mt-0 sm:max-w-md xl:p-0">
-          <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
-            <h1 className="text-xl text-center font-bold leading-tight tracking-tight text-black/80 md:text-2xl">
-              Login to your account
-            </h1>
-            <form className="space-y-4 md:space-y-6" onSubmit={handleLogin}>
-              <Input
-                label={<HiOutlineMail />}
-                name="email"
-                type="email"
-                placeholder="Email"
-                required
-              />
-              <Input
-                label={<HiOutlineKey />}
-                name="password"
-                type="password"
-                placeholder="Password"
-                required
-              />
-              {/* Pesan error */}
-              {error && (
-                <p className="text-red-500 text-sm text-center">{error}</p>
-              )}
-              <Button
-                disabled={isLoading}
-                type="submit"
-                variant="w-full p-2.5 rounded-lg bg-green-700 hover:bg-green-600 text-white"
-              >
-                {/* Tampilan tombol saat loading */}
-                {isLoading ? (
-                  <span className="loading loading-spinner loading-sm"></span>
-                ) : (
-                  "Login"
-                )}
-              </Button>
-              <hr />
-            </form>
-            {/* Tombol login dengan Google */}
-            <Button
-              type="button"
-              onClick={() => signIn("google", { callbackUrl, redirect: false })}
-              variant="w-full p-2.5 flex items-center justify-center rounded-lg bg-blue-700 hover:bg-blue-600 text-white"
-            >
-              <span className="inline-flex">
-                <Image
-                  src="/images/google.png"
-                  alt="google"
-                  className="w-6 h-6 mr-3"
-                  width={200}
-                  height={200}
-                />
-              </span>
-              Login with Google
-            </Button>
-          </div>
-        </div>
-        <p className="text-black/60 mt-5">
-          Don&apos;t have an account?{" "}
-          <Link href="/auth/register" className="text-blue-500 hover:underline">
-            Register
-          </Link>
-        </p>
-      </div>
-    </section>
+    <AuthLayout
+      title="Login to your account"
+      link="/auth/register"
+      linkText="Don't have an account? Sign Up "
+    >
+      <form className="space-y-4 md:space-y-6" onSubmit={handleLogin}>
+        <Input
+          label={<HiOutlineMail />}
+          name="email"
+          type="email"
+          placeholder="Email"
+          required
+        />
+        <Input
+          label={<HiOutlineKey />}
+          name="password"
+          type="password"
+          placeholder="Password"
+          required
+        />
+        {/* Pesan error */}
+        {error && <p className="text-red-500 text-sm text-center">{error}</p>}
+        <Button
+          disabled={isLoading}
+          type="submit"
+          variant="w-full p-2.5 rounded-lg bg-green-700 hover:bg-green-600 text-white"
+        >
+          {/* Tampilan tombol saat loading */}
+          {isLoading ? (
+            <span className="loading loading-spinner loading-sm"></span>
+          ) : (
+            "Login"
+          )}
+        </Button>
+        <hr />
+      </form>
+      {/* Tombol login dengan Google */}
+      <Button
+        type="button"
+        onClick={() => signIn("google", { callbackUrl, redirect: false })}
+        variant="w-full p-2.5 flex items-center justify-center rounded-lg bg-blue-700 hover:bg-blue-600 text-white"
+      >
+        <span className="inline-flex">
+          <Image
+            src="/images/google.png"
+            alt="google"
+            className="w-6 h-6 mr-3"
+            width={200}
+            height={200}
+          />
+        </span>
+        Login with Google
+      </Button>
+    </AuthLayout>
   );
 };
 
