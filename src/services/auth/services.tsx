@@ -54,7 +54,13 @@ export async function login(email: string) {
 
 // Fungsi untuk melakukan login dengan akun google
 export async function loginWithGoogle(
-  data: { email: string; role?: string },
+  data: {
+    email: string;
+    role?: string;
+    password?: string;
+    created_at?: Date;
+    updated_at?: Date;
+  },
   callback: Function
 ) {
   // Mengambil data pengguna dari koleksi "users" berdasarkan alamat email pengguna yang tersimpan di dalam database
@@ -67,6 +73,11 @@ export async function loginWithGoogle(
   } else {
     // Jika pengguna belum terdaftar, Menetapkan peran (role) default sebagai "member" untuk data pengguna yang baru
     data.role = "member";
+
+    // Menetapkan waktu pembuatan data (created_at) dan waktu terakhir data diperbarui (updated_at) sebagai waktu saat ini.
+    data.created_at = new Date(); // Menetapkan waktu pembuatan data
+    data.updated_at = new Date(); // Menetapkan waktu terakhir data diperbarui
+    data.password = "";
 
     // Menambahkan data pengguna baru ke koleksi "users" di database
     await addData("users", data, (result: boolean) => {

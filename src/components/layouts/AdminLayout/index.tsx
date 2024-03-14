@@ -1,4 +1,5 @@
 import Sidebar from "@/components/fragments/Sidebar";
+import { FaUsers } from "react-icons/fa";
 import { MdShoppingBag, MdSpaceDashboard } from "react-icons/md";
 
 type PropTypes = {
@@ -16,6 +17,11 @@ const listSidebarItem = [
     linkUrl: "/admin/products",
     icon: <MdShoppingBag />,
   },
+  {
+    title: "Users",
+    linkUrl: "/admin/users",
+    icon: <FaUsers />,
+  },
 ];
 
 const AdminLayout = (props: PropTypes) => {
@@ -24,9 +30,11 @@ const AdminLayout = (props: PropTypes) => {
   return (
     <>
       <Sidebar lists={listSidebarItem} />
-      <div className="p-4 sm:ml-64">
-        <div className="p-4 mt-14">{children}</div>
-      </div>
+      <section className="bg-[#111111] min-h-screen">
+        <div className="p-4 sm:ml-64">
+          <div className="p-4 mt-14">{children}</div>
+        </div>
+      </section>
     </>
   );
 };
