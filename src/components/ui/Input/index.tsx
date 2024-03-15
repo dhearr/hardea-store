@@ -4,10 +4,13 @@ type PropTypes = {
   type: string;
   placeholder?: string;
   required?: boolean;
+  defaultValue?: string;
+  disabled?: boolean;
 };
 
 const Input = (props: PropTypes) => {
-  const { label, name, type, placeholder, required } = props;
+  const { label, name, type, placeholder, required, defaultValue, disabled } =
+    props;
 
   return (
     <div>
@@ -19,7 +22,9 @@ const Input = (props: PropTypes) => {
           type={type}
           placeholder={placeholder}
           required={required}
-          className="grow placeholder:text-black/70"
+          defaultValue={defaultValue}
+          disabled={disabled}
+          className="grow placeholder:text-black/70 disabled:opacity-50"
         />
       </label>
     </div>

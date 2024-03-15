@@ -1,11 +1,13 @@
 import {
   addDoc, // Fungsi untuk menambahkan data ke koleksi
   collection, // Fungsi untuk mendapatkan referensi ke koleksi
+  deleteDoc, // Fungsi untuk menghapus data
   doc, // Fungsi untuk mendapatkan referensi ke dokumen
   getDoc, // Fungsi untuk mendapatkan dokumen tunggal
   getDocs, // Fungsi untuk mendapatkan sekumpulan dokumen
   getFirestore, // Fungsi untuk mendapatkan instance Firestore
   query, // Fungsi untuk membuat query
+  updateDoc, // Fungsi mengupdate data
   where, // Fungsi untuk menentukan kondisi pada query
 } from "firebase/firestore";
 import app from "./init";
@@ -54,12 +56,51 @@ export async function retrieveDataByField(
   return data;
 }
 
+// Fungsi untuk menambahkan data ke koleksi
 export async function addData(
   collectionName: string,
   data: any,
   callback: Function
 ) {
+  // Menambahkan data ke koleksi
   await addDoc(collection(firestore, collectionName), data)
+    .then(() => {
+      callback(true);
+    })
+    .catch((error) => {
+      callback(false);
+      console.log(error);
+    });
+}
+
+// Fungsi untuk mengupdate data
+export async function updateData(
+  collectionName: string,
+  id: string,
+  data: any,
+  callback: Function
+) {
+  // Mengupdate data
+  const docRef = doc(firestore, collectionName, id);
+  await updateDoc(docRef, data)
+    .then(() => {
+      callback(true);
+    })
+    .catch((error) => {
+      callback(false);
+      console.log(error);
+    });
+}
+
+// Fungsi untuk menghapus data
+export async function deleteData(
+  collectionName: string,
+  id: string,
+  callback: Function
+) {
+  // Menghapus data
+  const docRef = doc(firestore, collectionName, id);
+  await deleteDoc(docRef)
     .then(() => {
       callback(true);
     })
