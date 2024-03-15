@@ -4,6 +4,7 @@ import { NextAuthOptions } from "next-auth";
 import NextAuth from "next-auth/next";
 import CredentialsProvider from "next-auth/providers/credentials";
 import GoogleProvider from "next-auth/providers/google";
+import jwt from "jsonwebtoken";
 
 // Opsi konfigurasi NextAuth
 const authOptions: NextAuthOptions = {
@@ -89,6 +90,15 @@ const authOptions: NextAuthOptions = {
         // Jika role ada di dalam token
         session.user.role = token.role; // Menambahkan role ke session user
       }
+
+      // Mengenerate token
+      const accessToken = jwt.sign(token, process.env.NEXTAUTH_SECRET || "", {
+        algorithm: "HS256", // Menggunakan algoritma HS256
+      });
+
+      // Menambahkan token ke session
+      session.accessToken = accessToken;
+
       return session; // Mengembalikan session
     },
   },

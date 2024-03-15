@@ -3,6 +3,7 @@ import Input from "@/components/ui/Input";
 import Modal from "@/components/ui/Modal";
 import Select from "@/components/ui/Select";
 import usersServices from "@/services/users";
+import { useSession } from "next-auth/react";
 import { FormEvent, useState } from "react";
 import { GrUserSettings } from "react-icons/gr";
 import { HiOutlineMail, HiOutlineUser } from "react-icons/hi";
@@ -10,6 +11,7 @@ import { HiDevicePhoneMobile } from "react-icons/hi2";
 
 const ModalUpdateUser = (props: any) => {
   const { updatedUser, setUpdatedUser, setDataUpdateUsers } = props;
+  const session: any = useSession(); // Inisialisasi session
   const [setLoading, setIsLoading] = useState(false);
 
   const handleUpdateUser = async (event: FormEvent<HTMLFormElement>) => {
@@ -21,7 +23,11 @@ const ModalUpdateUser = (props: any) => {
     };
 
     // Mengirimkan permintaan POST ke server
-    const result = await usersServices.updateUser(updatedUser.id, data);
+    const result = await usersServices.updateUser(
+      updatedUser.id,
+      data,
+      session.data?.accessToken
+    );
 
     // Mengecek status permintaan
     if (result.status === 200) {

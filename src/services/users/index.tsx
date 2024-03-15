@@ -4,11 +4,26 @@ import instance from "@/lib/axios/instance";
 const usersServices = {
   // Metode untuk mendapatkan semua data user
   getAllUsers: () => instance.get("/api/users"),
+
   // Metode untuk update data user
-  updateUser: (id: string, data: any) =>
-    instance.put("/api/users", { id, data }),
+  updateUser: (id: string, data: any, token: string) =>
+    instance.put(
+      `/api/users/${id}`,
+      { data },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`, // Menambahkan token ke headers
+        },
+      }
+    ),
+
   // Metode untuk delete data user
-  deleteUser: (id: string) => instance.delete(`/api/users/${id}`),
+  deleteUser: (id: string, token: string) =>
+    instance.delete(`/api/users/${id}`, {
+      headers: {
+        Authorization: `Bearer ${token}`, // Menambahkan token ke headers
+      },
+    }),
 };
 
 export default usersServices;
