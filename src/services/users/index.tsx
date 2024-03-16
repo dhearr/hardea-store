@@ -24,6 +24,14 @@ const usersServices = {
         Authorization: `Bearer ${token}`, // Menambahkan token ke headers
       },
     }),
+
+  // Metode untuk mendapatkan profile user
+  getProfile: (token: string) =>
+    instance.get(`/api/users/profile`, {
+      headers: {
+        Authorization: `Bearer ${token}`, // Menambahkan token ke headers
+      },
+    }),
 };
 
 export default usersServices;

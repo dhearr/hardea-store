@@ -55,8 +55,10 @@ export async function login(email: string) {
 // Fungsi untuk melakukan login dengan akun google
 export async function loginWithGoogle(
   data: {
+    id?: string;
     email: string;
     role?: string;
+    image: string;
     password?: string;
     created_at?: Date;
     updated_at?: Date;
@@ -80,9 +82,10 @@ export async function loginWithGoogle(
     data.password = "";
 
     // Menambahkan data pengguna baru ke koleksi "users" di database
-    await addData("users", data, (result: boolean) => {
+    await addData("users", data, (status: boolean, res: any) => {
+      data.id = res.path.replace("users/", ""); // Menetapkan ID data yang ditambahkan
       // Memeriksa apakah penambahan data berhasil
-      if (result) {
+      if (status) {
         // Jika berhasil, panggil callback dengan data yang ditambahkan
         callback(data);
       }

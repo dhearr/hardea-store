@@ -53,6 +53,7 @@ const authOptions: NextAuthOptions = {
         token.fullname = user.fullname; // Menambahkan fullname ke token
         token.phone = user.phone; // Menambahkan phone ke token
         token.role = user.role; // Menambahkan role ke token
+        token.id = user.id; // Menambahkan id ke token
       }
 
       if (account?.provider === "google") {
@@ -60,6 +61,7 @@ const authOptions: NextAuthOptions = {
         const data = {
           fullname: user.name, // Mengambil nama lengkap dari user yang didapatkan dari Google
           email: user.email, // Mengambil alamat email dari user yang didapatkan dari Google
+          image: user.image, // Mengambil gambar profil dari user yang didapatkan dari Google
           type: "google", // Menentukan tipe autentikasi sebagai Google
         };
 
@@ -69,6 +71,8 @@ const authOptions: NextAuthOptions = {
           token.email = data.email; // Menambahkan alamat email ke token
           token.fullname = data.fullname; // Menambahkan nama lengkap ke token
           token.role = data.role; // Menambahkan peran (role) ke token
+          token.image = data.image; // Menambahkan gambar profil ke token
+          token.id = data.id; // Menambahkan id ke token
         });
       }
       return token; // Mengembalikan token
@@ -89,6 +93,14 @@ const authOptions: NextAuthOptions = {
       if ("role" in token) {
         // Jika role ada di dalam token
         session.user.role = token.role; // Menambahkan role ke session user
+      }
+      if ("id" in token) {
+        // Jika id ada di dalam token
+        session.user.id = token.id; // Menambahkan id ke session user
+      }
+      if ("image" in token) {
+        // Jika image ada di dalam token
+        session.user.image = token.image; // Menambahkan image ke session user
       }
 
       // Mengenerate token

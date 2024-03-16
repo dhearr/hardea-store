@@ -64,12 +64,11 @@ export async function addData(
 ) {
   // Menambahkan data ke koleksi
   await addDoc(collection(firestore, collectionName), data)
-    .then(() => {
-      callback(true);
+    .then((res) => {
+      callback(true, res);
     })
     .catch((error) => {
       callback(false);
-      console.log(error);
     });
 }
 
@@ -88,7 +87,6 @@ export async function updateData(
     })
     .catch((error) => {
       callback(false);
-      console.log(error);
     });
 }
 
@@ -106,6 +104,5 @@ export async function deleteData(
     })
     .catch((error) => {
       callback(false);
-      console.log(error);
     });
 }

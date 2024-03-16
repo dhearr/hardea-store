@@ -6,15 +6,26 @@ type PropTypes = {
   required?: boolean;
   defaultValue?: string;
   disabled?: boolean;
+  variant?: string;
 };
 
 const Input = (props: PropTypes) => {
-  const { label, name, type, placeholder, required, defaultValue, disabled } =
-    props;
+  const {
+    label,
+    name,
+    type,
+    placeholder,
+    required,
+    defaultValue,
+    disabled,
+    variant = "bg-slate-50",
+  } = props;
 
   return (
     <div>
-      <label className="input input-bordered bg-slate-50 text-black/70 flex items-center gap-2">
+      <label
+        className={`input input-bordered ${variant} text-black/70 flex items-center gap-2`}
+      >
         {label && <span>{label}</span>}
         <input
           id={name}

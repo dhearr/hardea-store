@@ -45,7 +45,7 @@ const Sidebar = (props: PropTypes) => {
                   <Button
                     type="button"
                     onClick={() => signOut()}
-                    variant="bg-[#ededed] text-[#0a0a0a] font-semibold hover:bg-[#d0d0d0] py-1 px-5 rounded-md transition-all"
+                    variant="bg-[#ededed] text-[#0a0a0a] hover:bg-[#d0d0d0] py-1 px-5 rounded-md transition-all"
                   >
                     Logout
                   </Button>
@@ -60,9 +60,6 @@ const Sidebar = (props: PropTypes) => {
         className="fixed top-0 left-0 z-40 w-64 h-screen pt-20 transition-transform -translate-x-full bg-[#000000] border-r-[1px] border-[#333333] sm:translate-x-0"
         aria-label="Sidebar"
       >
-        <div className="flex justify-center mb-5">
-          <h1 className="text-2xl font-bold text-white">Admin Panel</h1>
-        </div>
         <div className="h-full px-3 pb-4 overflow-y-auto bg-[#000000]">
           <ul className="space-y-2.5 font-semibold">
             {lists?.map((list, index) => (
