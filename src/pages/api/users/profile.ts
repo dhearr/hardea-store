@@ -15,12 +15,29 @@ export default async function handler(
         process.env.NEXTAUTH_SECRET || "",
         async (err: any, decoded: any) => {
           if (decoded) {
-            const profile = await retrieveDataById("users", decoded.id);
-            return res.status(200).json({
-              status: true,
-              statusCode: 200,
-              message: "success",
-              data: profile,
+            const profile: any = await retrieveDataById("users", decoded.id);
+            if (profile) {
+              profile.id = decoded.id;
+              res.status(200).json({
+                status: true,
+                statusCode: 200,
+                message: "success",
+                data: profile,
+              });
+            } else {
+              res.status(404).json({
+                status: false,
+                statusCode: 404,
+                message: "not found",
+                data: {},
+              });
+            }
+          } else {
+            res.status(403).json({
+              status: false,
+              statusCode: 403,
+              message: "access denied",
+              data: {},
             });
           }
         }

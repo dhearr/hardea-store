@@ -11,9 +11,18 @@ import {
   where, // Fungsi untuk menentukan kondisi pada query
 } from "firebase/firestore";
 import app from "./init";
+import {
+  getDownloadURL,
+  getStorage,
+  ref,
+  uploadBytesResumable,
+} from "firebase/storage";
 
 // Mendapatkan instance Firestore
 const firestore = getFirestore(app);
+
+// Mendapatkan instance Firebase Storage
+const storage = getStorage(app);
 
 // Fungsi untuk mengambil semua data dari sebuah koleksi
 export async function retrieveData(collectionName: string) {
@@ -105,4 +114,35 @@ export async function deleteData(
     .catch((error) => {
       callback(false);
     });
+}
+
+export async function uploadFile(
+  userid: string,
+  file: any,
+  callback: Function
+) {
+  if (file) {
+    if (file.size < 1048576) {
+      const newName = "profile." + file.name.split(".")[1];
+      const storageRef = ref(storage, `images/users/${userid}/${newName}`);
+      const uploadTask = uploadBytesResumable(storageRef, file);
+      uploadTask.on(
+        "state_changed",
+        (snapshot) => {
+          const progres =
+            (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+        },
+        (error) => {
+          console.log(error);
+        },
+        () => {
+          getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+            callback(downloadURL);
+          });
+        }
+      );
+    } else {
+      return false;
+    }
+  }
 }

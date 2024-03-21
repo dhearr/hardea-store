@@ -8,18 +8,20 @@ const ProfileMemberPage = () => {
   const session: any = useSession();
 
   useEffect(() => {
-    const getAllUsers = async () => {
-      const { data } = await usersServices.getProfile(
-        session.data?.accessToken
-      );
-      setProfile(data.data);
-    };
-    getAllUsers();
-  }, [session]);
+    if (session.data?.accessToken && Object.keys(profile).length === 0) {
+      const getProfile = async () => {
+        const { data } = await usersServices.getProfile(
+          session.data?.accessToken
+        );
+        setProfile(data.data);
+      };
+      getProfile();
+    }
+  }, [profile, session]);
 
   return (
     <>
-      <ProfileMemberView profile={profile} />
+      <ProfileMemberView profile={profile} setProfile={setProfile} />
     </>
   );
 };
