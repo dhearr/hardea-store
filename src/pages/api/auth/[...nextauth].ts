@@ -54,6 +54,7 @@ const authOptions: NextAuthOptions = {
         token.phone = user.phone; // Menambahkan phone ke token
         token.role = user.role; // Menambahkan role ke token
         token.id = user.id; // Menambahkan id ke token
+        token.image = user.image; // Menambahkan image ke token
       }
 
       if (account?.provider === "google") {

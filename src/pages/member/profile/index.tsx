@@ -21,7 +21,11 @@ const ProfileMemberPage = () => {
 
   return (
     <>
-      <ProfileMemberView profile={profile} setProfile={setProfile} />
+      <ProfileMemberView
+        profile={profile}
+        setProfile={setProfile}
+        session={session}
+      />
     </>
   );
 };

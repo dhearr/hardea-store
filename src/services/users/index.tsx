@@ -32,6 +32,18 @@ const usersServices = {
         Authorization: `Bearer ${token}`, // Menambahkan token ke headers
       },
     }),
+
+  // Metode untuk update profile user
+  updateProfile: (id: string, data: any, token: string) =>
+    instance.put(
+      `/api/users/profile/${id}`,
+      { data },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`, // Menambahkan token ke headers
+        },
+      }
+    ),
 };
 
 export default usersServices;

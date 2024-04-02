@@ -11,6 +11,7 @@ export async function register(
     role?: string;
     created_at?: Date;
     updated_at?: Date;
+    image?: string;
   },
   callback: Function // Callback untuk menangani hasil operasi
 ) {
@@ -26,8 +27,8 @@ export async function register(
       userData.role = "member"; // Jika peran tidak ditentukan, set peran sebagai "member" secara default
     }
 
+    userData.image = ""; // Set gambar pengguna sebagai string kosong
     userData.password = await bcrypt.hash(userData.password, 10); // Hash password sebelum disimpan ke database
-
     // Menetapkan waktu pembuatan data (created_at) dan waktu terakhir data diperbarui (updated_at) sebagai waktu saat ini.
     userData.created_at = new Date(); // Menetapkan waktu pembuatan data
     userData.updated_at = new Date(); // Menetapkan waktu terakhir data diperbarui

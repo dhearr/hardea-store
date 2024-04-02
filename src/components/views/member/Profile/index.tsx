@@ -2,23 +2,51 @@ import MemberLayout from "@/components/layouts/MemberLayout";
 import Button from "@/components/ui/Button";
 import Input from "@/components/ui/Input";
 import { uploadFile } from "@/lib/firebase/service";
+import usersServices from "@/services/users";
 import Image from "next/image";
 import { useState } from "react";
 import { HiOutlineKey, HiOutlineMail, HiOutlineUser } from "react-icons/hi";
 import { HiDevicePhoneMobile } from "react-icons/hi2";
 
-const ProfileMemberView = ({ profile, setProfile }: any) => {
+const ProfileMemberView = ({ profile, setProfile, session }: any) => {
   const [changeImage, setChangeImage] = useState<any>({});
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleChangeProfilePicture = (e: any) => {
     e.preventDefault();
+    setIsLoading(true);
     const file = e.target[0]?.files[0];
     if (file) {
-      uploadFile(profile?.id, file, (newImageURL: string) => {
-        setProfile({ ...profile, image: newImageURL });
-        setChangeImage({});
-        e.target[0].value = "";
-      });
+      uploadFile(
+        profile?.id,
+        file,
+        async (status: boolean, newImageURL: string) => {
+          if (status) {
+            const data = {
+              image: newImageURL,
+            };
+            // Mengirimkan permintaan POST ke server
+            const result = await usersServices.updateProfile(
+              profile.id,
+              data,
+              session.data?.accessToken
+            );
+
+            // Mengecek status permintaan
+            if (result.status === 200) {
+              setIsLoading(false);
+              setProfile({ ...profile, image: newImageURL });
+              setChangeImage({});
+              e.target[0].value = "";
+            } else {
+              setIsLoading(false);
+            }
+          } else {
+            setIsLoading(false);
+            setChangeImage({});
+          }
+        }
+      );
     }
   };
   return (
@@ -32,7 +60,7 @@ const ProfileMemberView = ({ profile, setProfile }: any) => {
             <div className="relative">
               <div className="w-36 h-36 overflow-hidden rounded-full">
                 <Image
-                  src={profile?.image}
+                  src={profile?.image ? profile?.image : "/images/profile.jpg"}
                   alt="profile"
                   layout="fill"
                   objectFit="cover"
@@ -78,7 +106,11 @@ const ProfileMemberView = ({ profile, setProfile }: any) => {
                 type="submit"
                 variant="bg-[#ededed] text-[#0a0a0a] hover:bg-[#d0d0d0] py-1.5 px-5 rounded-md transition-all w-full"
               >
-                Change Profile Picture
+                {isLoading ? (
+                  <span className="loading loading-spinner loading-xs"></span>
+                ) : (
+                  "Upload Profile Picture"
+                )}
               </Button>
             </div>
           </form>

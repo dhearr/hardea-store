@@ -137,12 +137,12 @@ export async function uploadFile(
         },
         () => {
           getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-            callback(downloadURL);
+            callback(true, downloadURL);
           });
         }
       );
     } else {
-      return false;
+      return callback(false);
     }
   }
 }
