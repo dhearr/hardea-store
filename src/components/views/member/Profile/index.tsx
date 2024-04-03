@@ -5,12 +5,38 @@ import { uploadFile } from "@/lib/firebase/service";
 import usersServices from "@/services/users";
 import Image from "next/image";
 import { useState } from "react";
+import { GrUserSettings } from "react-icons/gr";
 import { HiOutlineKey, HiOutlineMail, HiOutlineUser } from "react-icons/hi";
 import { HiDevicePhoneMobile } from "react-icons/hi2";
 
 const ProfileMemberView = ({ profile, setProfile, session }: any) => {
   const [changeImage, setChangeImage] = useState<any>({});
   const [isLoading, setIsLoading] = useState(false);
+
+  const handleChangeProfile = async (e: any) => {
+    e.preventDefault();
+    setIsLoading(true);
+    const form = e.target as HTMLFormElement; // Mengakses form yang sedang di-submit
+    const data = {
+      fullname: form.fullname.value, // Mengambil nilai fullname dari input fullname
+      phone: form.phone.value, // Mengambil nilai phone dari input phone
+    };
+    // Mengirimkan permintaan POST ke server
+    const result = await usersServices.updateProfile(
+      profile.id,
+      data,
+      session.data?.accessToken
+    );
+
+    // Mengecek status permintaan
+    if (result.status === 200) {
+      setIsLoading(false);
+      setProfile({ ...profile, fullname: data.fullname, phone: data.phone });
+      form.reset();
+    } else {
+      setIsLoading(false);
+    }
+  };
 
   const handleChangeProfilePicture = (e: any) => {
     e.preventDefault();
@@ -116,7 +142,8 @@ const ProfileMemberView = ({ profile, setProfile, session }: any) => {
           </form>
         </div>
         <div className="w-3/4 h-auto border bg-[#000000] shadow-lg border-[#333333] rounded-md p-8">
-          <form action="" className="space-y-5">
+          <h2 className="text-2xl text-white font-bold mb-3">Detail Profile</h2>
+          <form onSubmit={handleChangeProfile} className="space-y-5">
             <Input
               label={<HiOutlineUser />}
               name="fullname"
@@ -125,18 +152,27 @@ const ProfileMemberView = ({ profile, setProfile, session }: any) => {
               defaultValue={profile?.fullname}
             />
             <Input
-              label={<HiOutlineMail />}
-              name="email"
-              type="email"
-              variant="bg-[#161616] text-white/70"
-              defaultValue={profile?.email}
-            />
-            <Input
               label={<HiDevicePhoneMobile />}
               name="phone"
               type="number"
               variant="bg-[#161616] text-white/70"
               defaultValue={profile?.phone}
+            />
+            <Input
+              label={<HiOutlineMail />}
+              name="email"
+              type="email"
+              variant="bg-[#161616] text-white/70"
+              defaultValue={profile?.email}
+              disabled
+            />
+            <Input
+              label={<GrUserSettings />}
+              name="role"
+              type="text"
+              variant="bg-[#161616] text-white/70"
+              defaultValue={profile?.role}
+              disabled
             />
             {/* <Input
             label={<HiOutlineKey />}
@@ -146,10 +182,14 @@ const ProfileMemberView = ({ profile, setProfile, session }: any) => {
           /> */}
             <div className="flex justify-end">
               <Button
-                type="button"
+                type="submit"
                 variant="bg-[#ededed] text-[#0a0a0a] hover:bg-[#d0d0d0] py-1.5 px-5 rounded-md transition-all"
               >
-                Update Profile
+                {isLoading ? (
+                  <span className="loading loading-spinner loading-xs"></span>
+                ) : (
+                  "Update Profile"
+                )}
               </Button>
             </div>
           </form>
