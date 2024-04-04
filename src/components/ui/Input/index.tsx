@@ -35,7 +35,7 @@ const Input = (props: PropTypes) => {
           required={required}
           defaultValue={defaultValue}
           disabled={disabled}
-          className="grow placeholder:text-black/70 disabled:opacity-50"
+          className="grow disabled:opacity-50"
         />
       </label>
     </div>

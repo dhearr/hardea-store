@@ -1,6 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import jwt from "jsonwebtoken";
 import { retrieveDataById, updateData } from "@/lib/firebase/service";
+import { compare, hash } from "bcrypt";
 
 // Fungsi handler untuk menangani permintaan API
 export default async function handler(
@@ -52,6 +53,20 @@ export default async function handler(
       process.env.NEXTAUTH_SECRET || "",
       async (err: any, decoded: any) => {
         if (decoded) {
+          if (data.password) {
+            const confirmPassword = await compare(
+              data.oldPassword,
+              data.encryptedPassword
+            );
+            if (!confirmPassword) {
+              res
+                .status(400)
+                .json({ status: false, statusCode: 400, message: "failed" });
+            }
+            delete data.oldPassword;
+            delete data.encryptedPassword;
+            data.password = await hash(data.password, 10);
+          }
           await updateData("users", users[0], data, (result: boolean) => {
             if (result) {
               res

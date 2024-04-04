@@ -8,14 +8,15 @@ import { useState } from "react";
 import { GrUserSettings } from "react-icons/gr";
 import { HiOutlineKey, HiOutlineMail, HiOutlineUser } from "react-icons/hi";
 import { HiDevicePhoneMobile } from "react-icons/hi2";
+import { TbArrowAutofitHeight } from "react-icons/tb";
 
 const ProfileMemberView = ({ profile, setProfile, session }: any) => {
   const [changeImage, setChangeImage] = useState<any>({});
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState("");
 
   const handleChangeProfile = async (e: any) => {
     e.preventDefault();
-    setIsLoading(true);
+    setIsLoading("profile");
     const form = e.target as HTMLFormElement; // Mengakses form yang sedang di-submit
     const data = {
       fullname: form.fullname.value, // Mengambil nilai fullname dari input fullname
@@ -30,17 +31,17 @@ const ProfileMemberView = ({ profile, setProfile, session }: any) => {
 
     // Mengecek status permintaan
     if (result.status === 200) {
-      setIsLoading(false);
+      setIsLoading("");
       setProfile({ ...profile, fullname: data.fullname, phone: data.phone });
       form.reset();
     } else {
-      setIsLoading(false);
+      setIsLoading("");
     }
   };
 
   const handleChangeProfilePicture = (e: any) => {
     e.preventDefault();
-    setIsLoading(true);
+    setIsLoading("picture");
     const file = e.target[0]?.files[0];
     if (file) {
       uploadFile(
@@ -60,19 +61,44 @@ const ProfileMemberView = ({ profile, setProfile, session }: any) => {
 
             // Mengecek status permintaan
             if (result.status === 200) {
-              setIsLoading(false);
+              setIsLoading("");
               setProfile({ ...profile, image: newImageURL });
               setChangeImage({});
               e.target[0].value = "";
             } else {
-              setIsLoading(false);
+              setIsLoading("");
             }
           } else {
-            setIsLoading(false);
+            setIsLoading("");
             setChangeImage({});
           }
         }
       );
+    }
+  };
+
+  const handleChangePassword = async (e: any) => {
+    e.preventDefault();
+    setIsLoading("password");
+    const form = e.target as HTMLFormElement; // Mengakses form yang sedang di-submit
+    const data = {
+      password: form["new-password"].value, // Mengambil nilai password dari input new-password
+      oldPassword: form["old-password"].value, // Mengambil nilai password lama dari input old-password
+      encryptedPassword: profile.password, // Mengambil nilai password sebelumnya
+    };
+    // Mengirimkan permintaan POST ke server
+    const result = await usersServices.updateProfile(
+      profile.id,
+      data,
+      session.data?.accessToken
+    );
+
+    // Mengecek status permintaan
+    if (result.status === 200) {
+      setIsLoading("");
+      form.reset();
+    } else {
+      setIsLoading("");
     }
   };
   return (
@@ -132,7 +158,7 @@ const ProfileMemberView = ({ profile, setProfile, session }: any) => {
                 type="submit"
                 variant="bg-[#ededed] text-[#0a0a0a] hover:bg-[#d0d0d0] py-1.5 px-5 rounded-md transition-all w-full"
               >
-                {isLoading ? (
+                {isLoading === "picture" ? (
                   <span className="loading loading-spinner loading-xs"></span>
                 ) : (
                   "Upload Profile Picture"
@@ -141,7 +167,7 @@ const ProfileMemberView = ({ profile, setProfile, session }: any) => {
             </div>
           </form>
         </div>
-        <div className="w-3/4 h-auto border bg-[#000000] shadow-lg border-[#333333] rounded-md p-8">
+        <div className="w-3/6 h-auto border bg-[#000000] shadow-lg border-[#333333] rounded-md p-8">
           <h2 className="text-2xl text-white font-bold mb-3">Detail Profile</h2>
           <form onSubmit={handleChangeProfile} className="space-y-5">
             <Input
@@ -174,21 +200,48 @@ const ProfileMemberView = ({ profile, setProfile, session }: any) => {
               defaultValue={profile?.role}
               disabled
             />
-            {/* <Input
-            label={<HiOutlineKey />}
-            name="password"
-            type="password"
-            variant="bg-[#161616] text-white/70"
-          /> */}
             <div className="flex justify-end">
               <Button
                 type="submit"
                 variant="bg-[#ededed] text-[#0a0a0a] hover:bg-[#d0d0d0] py-1.5 px-5 rounded-md transition-all"
               >
-                {isLoading ? (
+                {isLoading === "profile" ? (
                   <span className="loading loading-spinner loading-xs"></span>
                 ) : (
                   "Update Profile"
+                )}
+              </Button>
+            </div>
+          </form>
+        </div>
+        <div className="w-3/12 h-auto border bg-[#000000] shadow-lg border-[#333333] rounded-md p-8">
+          <h2 className="text-2xl text-white font-bold mb-3">
+            Change Password
+          </h2>
+          <form onSubmit={handleChangePassword} className="space-y-5">
+            <Input
+              label={<HiOutlineKey />}
+              name="old-password"
+              type="password"
+              placeholder="Old Password"
+              variant="bg-[#161616] text-white/70 placeholder:text-sm"
+            />
+            <Input
+              label={<HiOutlineKey />}
+              name="new-password"
+              type="password"
+              placeholder="New Password"
+              variant="bg-[#161616] text-white/70"
+            />
+            <div className="flex justify-end">
+              <Button
+                type="submit"
+                variant="bg-[#ededed] text-[#0a0a0a] hover:bg-[#d0d0d0] py-1.5 px-5 rounded-md transition-all"
+              >
+                {isLoading === "password" ? (
+                  <span className="loading loading-spinner loading-xs"></span>
+                ) : (
+                  "Update Password"
                 )}
               </Button>
             </div>
