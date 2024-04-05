@@ -1,4 +1,5 @@
 import Navbar from "@/components/fragments/Navbar";
+import Toaster from "@/components/ui/Toaster";
 import "@/styles/globals.css";
 import { SessionProvider } from "next-auth/react";
 import type { AppProps } from "next/app";
@@ -23,6 +24,7 @@ export default function App({
       <div className={lato.className}>
         {!disabledNavbar.includes(pathname.split("/")[1]) && <Navbar />}
         <Component {...pageProps} />
+        <Toaster message="Item removed from cart." />
       </div>
     </SessionProvider>
   );
