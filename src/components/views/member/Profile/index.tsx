@@ -10,7 +10,12 @@ import { HiOutlineKey, HiOutlineMail, HiOutlineUser } from "react-icons/hi";
 import { HiDevicePhoneMobile } from "react-icons/hi2";
 import { TbArrowAutofitHeight } from "react-icons/tb";
 
-const ProfileMemberView = ({ profile, setProfile, session }: any) => {
+const ProfileMemberView = ({
+  profile,
+  setProfile,
+  session,
+  setToaster,
+}: any) => {
   const [changeImage, setChangeImage] = useState<any>({});
   const [isLoading, setIsLoading] = useState("");
 
@@ -34,6 +39,10 @@ const ProfileMemberView = ({ profile, setProfile, session }: any) => {
       setIsLoading("");
       setProfile({ ...profile, fullname: data.fullname, phone: data.phone });
       form.reset();
+      setToaster({
+        variant: "success",
+        message: "Profile updated successfully",
+      });
     } else {
       setIsLoading("");
     }
@@ -65,12 +74,20 @@ const ProfileMemberView = ({ profile, setProfile, session }: any) => {
               setProfile({ ...profile, image: newImageURL });
               setChangeImage({});
               e.target[0].value = "";
+              setToaster({
+                variant: "success",
+                message: "Profile picture updated successfully",
+              });
             } else {
               setIsLoading("");
             }
           } else {
             setIsLoading("");
             setChangeImage({});
+            setToaster({
+              variant: "danger",
+              message: "Failed to update profile picture",
+            });
           }
         }
       );
@@ -97,8 +114,16 @@ const ProfileMemberView = ({ profile, setProfile, session }: any) => {
     if (result.status === 200) {
       setIsLoading("");
       form.reset();
+      setToaster({
+        variant: "success",
+        message: "Password updated successfully",
+      });
     } else {
       setIsLoading("");
+      setToaster({
+        variant: "danger",
+        message: "Failed to update password",
+      });
     }
   };
   return (
@@ -203,7 +228,7 @@ const ProfileMemberView = ({ profile, setProfile, session }: any) => {
             <div className="flex justify-end">
               <Button
                 type="submit"
-                variant="bg-[#ededed] text-[#0a0a0a] hover:bg-[#d0d0d0] py-1.5 px-5 rounded-md transition-all"
+                variant="bg-[#ededed] text-[#0a0a0a] hover:bg-[#d0d0d0] py-1.5 px-5 min-w-full rounded-md transition-all"
               >
                 {isLoading === "profile" ? (
                   <span className="loading loading-spinner loading-xs"></span>
@@ -236,7 +261,7 @@ const ProfileMemberView = ({ profile, setProfile, session }: any) => {
             <div className="flex justify-end">
               <Button
                 type="submit"
-                variant="bg-[#ededed] text-[#0a0a0a] hover:bg-[#d0d0d0] py-1.5 px-5 rounded-md transition-all"
+                variant="bg-[#ededed] text-[#0a0a0a] hover:bg-[#d0d0d0] min-w-full py-1.5 px-5 rounded-md transition-all"
               >
                 {isLoading === "password" ? (
                   <span className="loading loading-spinner loading-xs"></span>

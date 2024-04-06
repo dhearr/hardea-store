@@ -1,34 +1,61 @@
-import { IoIosCloseCircle, IoMdCheckmarkCircle } from "react-icons/io";
+import { useEffect, useRef, useState } from "react";
+import {
+  IoIosCloseCircle,
+  IoIosWarning,
+  IoMdCheckmarkCircle,
+} from "react-icons/io";
 import { IoClose } from "react-icons/io5";
 
 type PropTypes = {
   variant: string;
   message?: string;
+  setToaster: any;
 };
 
 const ToasterVariant: any = {
   success: {
     title: "Success",
     icon: <IoMdCheckmarkCircle />,
-    color: "#a3d9a5",
-    barColor: "#3f9242",
+    iconColor: "text-[#a3d9a5]",
+    bgBarColor: "bg-[#a3d9a5]",
+    barColor: "bg-[#3f9242]",
   },
   danger: {
-    title: "Failed",
+    title: "Error",
     icon: <IoIosCloseCircle />,
-    color: "#f39b9a",
-    barColor: "#bb2525",
+    iconColor: "text-[#f39b9a]",
+    bgBarColor: "bg-[#f39b9a]",
+    barColor: "bg-[#bb2525]",
+  },
+  warning: {
+    title: "Warning",
+    icon: <IoIosWarning />,
+    iconColor: "text-[#f8e3a2]",
+    bgBarColor: "bg-[#f8e3a2]",
+    barColor: "bg-[#e9b949]",
   },
 };
 
 const Toaster = (props: PropTypes) => {
-  const { variant = "danger", message } = props;
-  // console.log(ToasterVariant[variant].color);
+  const { variant, message, setToaster } = props;
+  const [lengthBar, setLengthBar] = useState(100);
+  const timerRef = useRef<any>(null);
+
+  const timerStart = () => {
+    timerRef.current = setInterval(() => {
+      setLengthBar((prevLength) => prevLength - 0.15);
+    }, 1);
+  };
+
+  useEffect(() => {
+    timerStart();
+    return () => clearInterval(timerRef.current);
+  }, []);
 
   return (
-    <div className="fixed z-[9999] bottom-0 transform translate-x-20 flex items-center w-full max-w-xs p-4 mb-4 bg-white rounded-md shadow-lg overflow-hidden">
+    <div className="fixed z-[9999] bottom-0 left-1/2 transform -translate-x-1/2 flex items-center w-full max-w-xs p-4 mb-4 bg-white rounded-md shadow-lg overflow-hidden">
       <div
-        className={`inline-flex items-center text-[24px] justify-center flex-shrink-0 w-8 h-8 bg-[${ToasterVariant[variant].barColor}] text-[${ToasterVariant[variant].color}] rounded-md`}
+        className={`inline-flex items-center text-[24px] justify-center flex-shrink-0 w-8 h-8 ${ToasterVariant[variant].barColor} ${ToasterVariant[variant].iconColor} rounded-md`}
       >
         {ToasterVariant[variant].icon}
       </div>
@@ -36,14 +63,19 @@ const Toaster = (props: PropTypes) => {
         <p className="text-md font-bold">{ToasterVariant[variant].title}</p>
         <p className="text-sm font-normal">{message}</p>
       </div>
-      <button type="button" className="ms-auto -mx-1.5 -my-1.5 p-1.5">
+      <button
+        type="button"
+        className="ms-auto -mx-1.5 -my-1.5 p-1.5"
+        onClick={() => setToaster({})}
+      >
         <IoClose />
       </button>
       <div
-        className={`absolute w-full h-1.5 bg-[${ToasterVariant[variant].color}] bottom-0 left-0`}
+        className={`absolute w-full h-1.5 ${ToasterVariant[variant].bgBarColor} bottom-0 left-0`}
       >
         <div
-          className={`w-[70%] h-1.5 bg-[${ToasterVariant[variant].barColor}]`}
+          className={`h-1.5 ${ToasterVariant[variant].barColor}`}
+          style={{ width: `${lengthBar}%` }}
         />
       </div>
     </div>

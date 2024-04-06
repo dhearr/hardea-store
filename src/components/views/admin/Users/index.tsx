@@ -8,10 +8,11 @@ import ModalDeleteUser from "./ModalDeleteUser";
 
 type PropTypes = {
   usersData: any;
+  setToaster: any;
 };
 
 const UsersAdminView = (props: PropTypes) => {
-  const { usersData } = props;
+  const { usersData, setToaster } = props;
   const [updatedUser, setUpdatedUser] = useState<any>({});
   const [deletedUser, setDeletedUser] = useState<any>({});
   const [dataUpdateUsers, setDataUpdateUsers] = useState([]);
@@ -94,6 +95,7 @@ const UsersAdminView = (props: PropTypes) => {
           updatedUser={updatedUser}
           setUpdatedUser={setUpdatedUser}
           setDataUpdateUsers={setDataUpdateUsers}
+          setToaster={setToaster}
         />
       )}
       {/* Modal untuk menghapus pengguna */}
@@ -102,6 +104,7 @@ const UsersAdminView = (props: PropTypes) => {
           deletedUser={deletedUser}
           setDeletedUser={setDeletedUser}
           setDataUpdateUsers={setDataUpdateUsers}
+          setToaster={setToaster}
         />
       )}
     </>

@@ -10,7 +10,7 @@ import { HiOutlineMail, HiOutlineUser } from "react-icons/hi";
 import { HiDevicePhoneMobile } from "react-icons/hi2";
 
 const ModalUpdateUser = (props: any) => {
-  const { updatedUser, setUpdatedUser, setDataUpdateUsers } = props;
+  const { updatedUser, setUpdatedUser, setDataUpdateUsers, setToaster } = props;
   const session: any = useSession(); // Inisialisasi session
   const [setLoading, setIsLoading] = useState(false);
 
@@ -35,8 +35,16 @@ const ModalUpdateUser = (props: any) => {
       setUpdatedUser({});
       const { data } = await usersServices.getAllUsers(); // Mengambil data users dari server
       setDataUpdateUsers(data.data); // Menetapkan data users ke state
+      setToaster({
+        variant: "success",
+        message: "User updated successfully",
+      });
     } else {
       setIsLoading(false);
+      setToaster({
+        variant: "danger",
+        message: "Failed to update user",
+      });
     }
   };
 

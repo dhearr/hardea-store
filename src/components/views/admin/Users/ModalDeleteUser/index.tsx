@@ -4,11 +4,15 @@ import usersServices from "@/services/users";
 import { useSession } from "next-auth/react";
 
 const ModalDeleteUser = (props: any) => {
-  const { deletedUser, setDeletedUser, setDataUpdateUsers } = props;
+  const { deletedUser, setDeletedUser, setDataUpdateUsers, setToaster } = props;
   const session: any = useSession(); // Inisialisasi session
 
   const handleDeleteUser = async () => {
     usersServices.deleteUser(deletedUser.id, session.data?.accessToken); // Menghapus user dari server
+    setToaster({
+      variant: "success",
+      message: "User deleted successfully",
+    });
     setDeletedUser({});
     const { data } = await usersServices.getAllUsers(); // Mengambil data users dari server
     setDataUpdateUsers(data.data); // Menetapkan data users ke state
