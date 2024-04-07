@@ -4,22 +4,28 @@ import Input from "@/components/ui/Input";
 import { uploadFile } from "@/lib/firebase/service";
 import usersServices from "@/services/users";
 import Image from "next/image";
-import { useState } from "react";
+import { Dispatch, FormEvent, SetStateAction, useState } from "react";
 import { GrUserSettings } from "react-icons/gr";
 import { HiOutlineKey, HiOutlineMail, HiOutlineUser } from "react-icons/hi";
 import { HiDevicePhoneMobile } from "react-icons/hi2";
-import { TbArrowAutofitHeight } from "react-icons/tb";
+
+type PropTypes = {
+  profile: any;
+  setProfile: Dispatch<SetStateAction<{}>>;
+  session: any;
+  setToaster: Dispatch<SetStateAction<{}>>;
+};
 
 const ProfileMemberView = ({
   profile,
   setProfile,
   session,
   setToaster,
-}: any) => {
+}: PropTypes) => {
   const [changeImage, setChangeImage] = useState<any>({});
   const [isLoading, setIsLoading] = useState("");
 
-  const handleChangeProfile = async (e: any) => {
+  const handleChangeProfile = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsLoading("profile");
     const form = e.target as HTMLFormElement; // Mengakses form yang sedang di-submit
@@ -29,7 +35,6 @@ const ProfileMemberView = ({
     };
     // Mengirimkan permintaan POST ke server
     const result = await usersServices.updateProfile(
-      profile.id,
       data,
       session.data?.accessToken
     );
@@ -48,10 +53,11 @@ const ProfileMemberView = ({
     }
   };
 
-  const handleChangeProfilePicture = (e: any) => {
+  const handleChangeProfilePicture = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsLoading("picture");
-    const file = e.target[0]?.files[0];
+    const form = e.target as HTMLFormElement;
+    const file = form.image.files[0];
     if (file) {
       uploadFile(
         profile?.id,
@@ -63,7 +69,6 @@ const ProfileMemberView = ({
             };
             // Mengirimkan permintaan POST ke server
             const result = await usersServices.updateProfile(
-              profile.id,
               data,
               session.data?.accessToken
             );
@@ -73,7 +78,7 @@ const ProfileMemberView = ({
               setIsLoading("");
               setProfile({ ...profile, image: newImageURL });
               setChangeImage({});
-              e.target[0].value = "";
+              form.reset();
               setToaster({
                 variant: "success",
                 message: "Profile picture updated successfully",
@@ -94,7 +99,7 @@ const ProfileMemberView = ({
     }
   };
 
-  const handleChangePassword = async (e: any) => {
+  const handleChangePassword = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsLoading("password");
     const form = e.target as HTMLFormElement; // Mengakses form yang sedang di-submit
@@ -103,22 +108,23 @@ const ProfileMemberView = ({
       oldPassword: form["old-password"].value, // Mengambil nilai password lama dari input old-password
       encryptedPassword: profile.password, // Mengambil nilai password sebelumnya
     };
-    // Mengirimkan permintaan POST ke server
-    const result = await usersServices.updateProfile(
-      profile.id,
-      data,
-      session.data?.accessToken
-    );
+    try {
+      // Mengirimkan permintaan POST ke server
+      const result = await usersServices.updateProfile(
+        data,
+        session.data?.accessToken
+      );
 
-    // Mengecek status permintaan
-    if (result.status === 200) {
-      setIsLoading("");
-      form.reset();
-      setToaster({
-        variant: "success",
-        message: "Password updated successfully",
-      });
-    } else {
+      // Mengecek status permintaan
+      if (result.status === 200) {
+        setIsLoading("");
+        form.reset();
+        setToaster({
+          variant: "success",
+          message: "Password updated successfully",
+        });
+      }
+    } catch (error) {
       setIsLoading("");
       setToaster({
         variant: "danger",

@@ -34,9 +34,9 @@ const usersServices = {
     }),
 
   // Metode untuk update profile user
-  updateProfile: (id: string, data: any, token: string) =>
+  updateProfile: (data: any, token: string) =>
     instance.put(
-      `/api/users/profile/${id}`,
+      `/api/users/profile`,
       { data },
       {
         headers: {
