@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
 import {
   IoIosCloseCircle,
   IoIosWarning,
@@ -9,7 +9,7 @@ import { IoClose } from "react-icons/io5";
 type PropTypes = {
   variant: string;
   message?: string;
-  setToaster: any;
+  setToaster: Dispatch<SetStateAction<{}>>;
 };
 
 const ToasterVariant: any = {

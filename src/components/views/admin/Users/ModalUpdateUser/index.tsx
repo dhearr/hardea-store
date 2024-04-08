@@ -3,16 +3,24 @@ import Input from "@/components/ui/Input";
 import Modal from "@/components/ui/Modal";
 import Select from "@/components/ui/Select";
 import usersServices from "@/services/users";
+import { User } from "@/types/user.type";
 import { useSession } from "next-auth/react";
-import { FormEvent, useState } from "react";
+import { Dispatch, FormEvent, SetStateAction, useState } from "react";
 import { GrUserSettings } from "react-icons/gr";
 import { HiOutlineMail, HiOutlineUser } from "react-icons/hi";
 import { HiDevicePhoneMobile } from "react-icons/hi2";
 
-const ModalUpdateUser = (props: any) => {
+type PropTypes = {
+  updatedUser: User | any;
+  setUpdatedUser: Dispatch<SetStateAction<{}>>;
+  setDataUpdateUsers: Dispatch<SetStateAction<User[]>>;
+  setToaster: Dispatch<SetStateAction<{}>>;
+};
+
+const ModalUpdateUser = (props: PropTypes) => {
   const { updatedUser, setUpdatedUser, setDataUpdateUsers, setToaster } = props;
   const session: any = useSession(); // Inisialisasi session
-  const [setLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleUpdateUser = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault(); // Mencegah reload halaman saat submit form
@@ -89,7 +97,11 @@ const ModalUpdateUser = (props: any) => {
           type="submit"
           variant="p-2 rounded-md bg-green-600 hover:bg-green-700 text-white font-semibold"
         >
-          Update
+          {isLoading ? (
+            <span className="loading loading-spinner loading-xs"></span>
+          ) : (
+            "Update"
+          )}
         </Button>
       </form>
     </Modal>

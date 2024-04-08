@@ -1,21 +1,22 @@
 import AdminLayout from "@/components/layouts/AdminLayout";
 import Button from "@/components/ui/Button";
-import { useEffect, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { FaTrash } from "react-icons/fa";
 import ModalUpdateUser from "./ModalUpdateUser";
 import { BiSolidEdit } from "react-icons/bi";
 import ModalDeleteUser from "./ModalDeleteUser";
+import { User } from "@/types/user.type";
 
 type PropTypes = {
-  usersData: any;
-  setToaster: any;
+  usersData: User[];
+  setToaster: Dispatch<SetStateAction<{}>>;
 };
 
 const UsersAdminView = (props: PropTypes) => {
   const { usersData, setToaster } = props;
-  const [updatedUser, setUpdatedUser] = useState<any>({});
-  const [deletedUser, setDeletedUser] = useState<any>({});
-  const [dataUpdateUsers, setDataUpdateUsers] = useState([]);
+  const [updatedUser, setUpdatedUser] = useState<User | {}>({});
+  const [deletedUser, setDeletedUser] = useState<User | {}>({});
+  const [dataUpdateUsers, setDataUpdateUsers] = useState<User[]>([]);
 
   useEffect(() => {
     setDataUpdateUsers(usersData);

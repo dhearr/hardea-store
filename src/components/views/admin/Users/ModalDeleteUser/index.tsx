@@ -1,9 +1,18 @@
 import Button from "@/components/ui/Button";
 import Modal from "@/components/ui/Modal";
 import usersServices from "@/services/users";
+import { User } from "@/types/user.type";
 import { useSession } from "next-auth/react";
+import { Dispatch, SetStateAction } from "react";
 
-const ModalDeleteUser = (props: any) => {
+type PropTypes = {
+  deletedUser: User | any;
+  setDeletedUser: Dispatch<SetStateAction<{}>>;
+  setDataUpdateUsers: Dispatch<SetStateAction<User[]>>;
+  setToaster: Dispatch<SetStateAction<{}>>;
+};
+
+const ModalDeleteUser = (props: PropTypes) => {
   const { deletedUser, setDeletedUser, setDataUpdateUsers, setToaster } = props;
   const session: any = useSession(); // Inisialisasi session
 
