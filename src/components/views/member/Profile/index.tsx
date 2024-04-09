@@ -3,6 +3,7 @@ import Button from "@/components/ui/Button";
 import Input from "@/components/ui/Input";
 import { uploadFile } from "@/lib/firebase/service";
 import usersServices from "@/services/users";
+import { User } from "@/types/user.type";
 import Image from "next/image";
 import { Dispatch, FormEvent, SetStateAction, useState } from "react";
 import { GrUserSettings } from "react-icons/gr";
@@ -10,7 +11,7 @@ import { HiOutlineKey, HiOutlineMail, HiOutlineUser } from "react-icons/hi";
 import { HiDevicePhoneMobile } from "react-icons/hi2";
 
 type PropTypes = {
-  profile: any;
+  profile: User | any;
   setProfile: Dispatch<SetStateAction<{}>>;
   session: any;
   setToaster: Dispatch<SetStateAction<{}>>;
@@ -22,7 +23,7 @@ const ProfileMemberView = ({
   session,
   setToaster,
 }: PropTypes) => {
-  const [changeImage, setChangeImage] = useState<any>({});
+  const [changeImage, setChangeImage] = useState<File | any>({});
   const [isLoading, setIsLoading] = useState("");
 
   const handleChangeProfile = async (e: FormEvent<HTMLFormElement>) => {
@@ -214,6 +215,7 @@ const ProfileMemberView = ({
               type="number"
               variant="bg-[#161616] text-white/70"
               defaultValue={profile?.phone}
+              placeholder="Phone Number"
             />
             <Input
               label={<HiOutlineMail />}
@@ -255,19 +257,22 @@ const ProfileMemberView = ({
               name="old-password"
               type="password"
               placeholder="Old Password"
-              variant="bg-[#161616] text-white/70 placeholder:text-sm"
+              disabled={profile.type === "google"}
+              variant="bg-[#161616] text-white/70"
             />
             <Input
               label={<HiOutlineKey />}
               name="new-password"
               type="password"
               placeholder="New Password"
+              disabled={profile.type === "google"}
               variant="bg-[#161616] text-white/70"
             />
             <div className="flex justify-end">
               <Button
                 type="submit"
-                variant="bg-[#ededed] text-[#0a0a0a] hover:bg-[#d0d0d0] min-w-full py-1.5 px-5 rounded-md transition-all"
+                disabled={isLoading === "password" || profile.type === "google"}
+                variant="bg-[#ededed] text-[#0a0a0a] hover:bg-[#d0d0d0] min-w-full py-1.5 px-5 rounded-md transition-all disabled:cursor-not-allowed disabled:bg-[#d0d0d0]"
               >
                 {isLoading === "password" ? (
                   <span className="loading loading-spinner loading-xs"></span>

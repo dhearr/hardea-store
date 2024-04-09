@@ -3,21 +3,23 @@ import Button from "@/components/ui/Button";
 import Input from "@/components/ui/Input";
 import authServices from "@/services/auth";
 import { useRouter } from "next/router";
-import { FormEvent, useState } from "react";
+import { Dispatch, FormEvent, SetStateAction, useState } from "react";
 import { HiOutlineKey, HiOutlineMail } from "react-icons/hi";
 import { HiDevicePhoneMobile, HiOutlineUser } from "react-icons/hi2";
 
-const RegisterView = () => {
-  // State untuk menangani loading, error, dan router
+type PropTypes = {
+  setToaster: Dispatch<SetStateAction<{}>>;
+};
+
+const RegisterView = ({ setToaster }: PropTypes) => {
+  // State untuk menangani loading, dan router
   const [isLoading, setIsLoading] = useState(false); // State untuk menangani status loading
-  const [error, setError] = useState(""); // State untuk menangani pesan error
   const { push } = useRouter(); // Menggunakan hook useRouter untuk mendapatkan objek router
 
   // Fungsi untuk menangani proses registrasi
   const handleRegister = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault(); // Mencegah reload halaman saat submit form
     setIsLoading(true);
-    setError("");
     const form = event.target as HTMLFormElement; // Mengakses form yang sedang di-submit
     const data = {
       fullname: form.fullname.value, // Mengambil nilai fullname dari input fullname
@@ -26,17 +28,32 @@ const RegisterView = () => {
       password: form.password.value, // Mengambil nilai password dari input password
     };
 
-    // Mendaftarkan akun dan menyimpan hasilnya ke result.
-    const result = await authServices.registerAccount(data);
+    try {
+      // Mendaftarkan akun dan menyimpan hasilnya ke result.
+      const result = await authServices.registerAccount(data);
 
-    // Jika status respons 200, berarti registrasi berhasil
-    if (result.status === 200) {
-      form.reset(); // Mengosongkan form
+      // Jika status respons 200, berarti registrasi berhasil
+      if (result.status === 200) {
+        form.reset(); // Mengosongkan form
+        setIsLoading(false);
+        push("/auth/login"); // Redirect ke halaman login
+        setToaster({
+          variant: "success",
+          message: "Register success, please login",
+        });
+      } else {
+        setIsLoading(false);
+        setToaster({
+          variant: "danger",
+          message: "Register failed, please call support",
+        });
+      }
+    } catch (error) {
       setIsLoading(false);
-      push("/auth/login"); // Redirect ke halaman login
-    } else {
-      setIsLoading(false);
-      setError("Email already exist"); // Menetapkan pesan error
+      setToaster({
+        variant: "danger",
+        message: "Register failed, email already exists",
+      });
     }
   };
 
@@ -44,7 +61,8 @@ const RegisterView = () => {
     <AuthLayout
       title="Register for your account"
       link="/auth/login"
-      linkText="Already have an account? Sign In "
+      linkText="Already have an account? Sign In"
+      setToaster={setToaster}
     >
       <form className="space-y-4 md:space-y-6" onSubmit={handleRegister}>
         <Input
@@ -75,8 +93,6 @@ const RegisterView = () => {
           placeholder="Password"
           required
         />
-        {/* Pesan error */}
-        {error && <p className="text-red-500 text-sm text-center">{error}</p>}
         <Button
           disabled={isLoading}
           type="submit"

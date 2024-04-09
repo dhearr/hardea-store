@@ -15,11 +15,17 @@ type PropTypes = {
   setUpdatedUser: Dispatch<SetStateAction<{}>>;
   setDataUpdateUsers: Dispatch<SetStateAction<User[]>>;
   setToaster: Dispatch<SetStateAction<{}>>;
+  session: any;
 };
 
 const ModalUpdateUser = (props: PropTypes) => {
-  const { updatedUser, setUpdatedUser, setDataUpdateUsers, setToaster } = props;
-  const session: any = useSession(); // Inisialisasi session
+  const {
+    updatedUser,
+    setUpdatedUser,
+    setDataUpdateUsers,
+    setToaster,
+    session,
+  } = props;
   const [isLoading, setIsLoading] = useState(false);
 
   const handleUpdateUser = async (event: FormEvent<HTMLFormElement>) => {

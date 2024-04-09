@@ -6,6 +6,7 @@ import ModalUpdateUser from "./ModalUpdateUser";
 import { BiSolidEdit } from "react-icons/bi";
 import ModalDeleteUser from "./ModalDeleteUser";
 import { User } from "@/types/user.type";
+import { useSession } from "next-auth/react";
 
 type PropTypes = {
   usersData: User[];
@@ -14,6 +15,7 @@ type PropTypes = {
 
 const UsersAdminView = (props: PropTypes) => {
   const { usersData, setToaster } = props;
+  const session: any = useSession(); // Inisialisasi session
   const [updatedUser, setUpdatedUser] = useState<User | {}>({});
   const [deletedUser, setDeletedUser] = useState<User | {}>({});
   const [dataUpdateUsers, setDataUpdateUsers] = useState<User[]>([]);
@@ -53,7 +55,7 @@ const UsersAdminView = (props: PropTypes) => {
               </tr>
             </thead>
             <tbody>
-              {dataUpdateUsers.map((user: any, index: number) => (
+              {dataUpdateUsers.map((user: User, index: number) => (
                 <tr
                   key={user.id}
                   className="bg-[#000000] border-b border-[#333333]"
@@ -97,6 +99,7 @@ const UsersAdminView = (props: PropTypes) => {
           setUpdatedUser={setUpdatedUser}
           setDataUpdateUsers={setDataUpdateUsers}
           setToaster={setToaster}
+          session={session}
         />
       )}
       {/* Modal untuk menghapus pengguna */}
@@ -106,6 +109,7 @@ const UsersAdminView = (props: PropTypes) => {
           setDeletedUser={setDeletedUser}
           setDataUpdateUsers={setDataUpdateUsers}
           setToaster={setToaster}
+          session={session}
         />
       )}
     </>

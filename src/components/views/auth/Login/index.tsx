@@ -4,13 +4,16 @@ import Input from "@/components/ui/Input";
 import { signIn } from "next-auth/react";
 import Image from "next/image";
 import { useRouter } from "next/router";
-import { FormEvent, useState } from "react";
+import { Dispatch, FormEvent, SetStateAction, useState } from "react";
 import { HiOutlineKey, HiOutlineMail } from "react-icons/hi";
 
-const LoginView = () => {
-  // State untuk menangani loading, error, dan router
+type PropTypes = {
+  setToaster: Dispatch<SetStateAction<{}>>;
+};
+
+const LoginView = ({ setToaster }: PropTypes) => {
+  // State untuk menangani loading, dan router
   const [isLoading, setIsLoading] = useState(false); // State untuk menangani status loading
-  const [error, setError] = useState(""); // State untuk menangani pesan error
   const { push, query } = useRouter(); // Menggunakan hook useRouter untuk mendapatkan informasi tentang router
 
   // Mendapatkan callbackUrl dari query atau default "/"
@@ -20,7 +23,6 @@ const LoginView = () => {
   const handleLogin = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault(); // Mencegah reload halaman saat submit form
     setIsLoading(true);
-    setError("");
     const form = event.target as HTMLFormElement; // Mengakses form yang sedang di-submit
     try {
       // Melakukan sign in dengan credential (email dan password)
@@ -36,13 +38,23 @@ const LoginView = () => {
         form.reset(); // Mengosongkan form
         setIsLoading(false);
         push(callbackUrl); // Redirect ke callbackUrl
+        setToaster({
+          variant: "success",
+          message: "Login success, Wellcome",
+        });
       } else {
         setIsLoading(false);
-        setError("Email or Password is incorrect"); // Menetapkan pesan error
+        setToaster({
+          variant: "danger",
+          message: "Email or Password is incorrect",
+        });
       }
     } catch (error) {
       setIsLoading(false);
-      setError("Email or Password is incorrect"); // Menetapkan pesan error
+      setToaster({
+        variant: "danger",
+        message: "Login failed, please call support",
+      });
     }
   };
 
@@ -51,6 +63,7 @@ const LoginView = () => {
       title="Login to your account"
       link="/auth/register"
       linkText="Don't have an account? Sign Up "
+      setToaster={setToaster}
     >
       <form className="space-y-4 md:space-y-6" onSubmit={handleLogin}>
         <Input
@@ -67,8 +80,6 @@ const LoginView = () => {
           placeholder="Password"
           required
         />
-        {/* Pesan error */}
-        {error && <p className="text-red-500 text-sm text-center">{error}</p>}
         <Button
           disabled={isLoading}
           type="submit"

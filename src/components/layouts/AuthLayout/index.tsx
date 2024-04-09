@@ -1,14 +1,16 @@
 import Link from "next/link";
+import { Dispatch, SetStateAction } from "react";
 
 type PropTypes = {
   title?: string;
   linkText?: string;
   link: string;
   children: React.ReactNode;
+  setToaster: Dispatch<SetStateAction<{}>>;
 };
 
 const AuthLayout = (props: PropTypes) => {
-  const { title, linkText, link, children } = props;
+  const { title, linkText, link, children, setToaster } = props;
 
   return (
     <section className="bg-gray-50 min-h-screen">
