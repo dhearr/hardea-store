@@ -53,9 +53,9 @@ const Toaster = (props: PropTypes) => {
   }, []);
 
   return (
-    <div className="fixed z-[9999] bottom-0 left-1/2 transform -translate-x-1/2 flex items-center w-full max-w-xs p-4 mb-4 bg-white rounded-md shadow-lg overflow-hidden">
+    <div className="fixed bottom-0 left-1/2 z-[9999] mb-4 flex w-full max-w-xs -translate-x-1/2 transform items-center overflow-hidden rounded-md bg-white p-4 shadow-lg">
       <div
-        className={`inline-flex items-center text-[24px] justify-center flex-shrink-0 w-8 h-8 ${ToasterVariant[variant].barColor} ${ToasterVariant[variant].iconColor} rounded-md`}
+        className={`inline-flex h-8 w-8 flex-shrink-0 items-center justify-center text-[24px] ${ToasterVariant[variant].barColor} ${ToasterVariant[variant].iconColor} rounded-md`}
       >
         {ToasterVariant[variant].icon}
       </div>
@@ -65,13 +65,13 @@ const Toaster = (props: PropTypes) => {
       </div>
       <button
         type="button"
-        className="ms-auto -mx-1.5 -my-1.5 p-1.5"
+        className="-mx-1.5 -my-1.5 ms-auto p-1.5"
         onClick={() => setToaster({})}
       >
         <IoClose />
       </button>
       <div
-        className={`absolute w-full h-1.5 ${ToasterVariant[variant].bgBarColor} bottom-0 left-0`}
+        className={`absolute h-1.5 w-full ${ToasterVariant[variant].bgBarColor} bottom-0 left-0`}
       >
         <div
           className={`h-1.5 ${ToasterVariant[variant].barColor}`}

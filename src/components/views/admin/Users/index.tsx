@@ -28,11 +28,11 @@ const UsersAdminView = (props: PropTypes) => {
     <>
       <AdminLayout>
         <div className="mb-5">
-          <h1 className="text-2xl text-white font-semibold">User Management</h1>
+          <h1 className="text-2xl font-semibold text-white">User Management</h1>
         </div>
         <div className="relative overflow-x-auto shadow-md sm:rounded-md">
-          <table className="w-full text-sm text-left text-white font-medium">
-            <thead className="text-xs text-white uppercase bg-[#000000] border-b border-[#333333]">
+          <table className="w-full text-left text-sm font-medium text-white">
+            <thead className="border-b border-[#333333] bg-[#000000] text-xs uppercase text-white">
               <tr>
                 <th scope="col" className="px-6 py-5">
                   No
@@ -58,11 +58,11 @@ const UsersAdminView = (props: PropTypes) => {
               {dataUpdateUsers.map((user: User, index: number) => (
                 <tr
                   key={user.id}
-                  className="bg-[#000000] border-b border-[#333333]"
+                  className="border-b border-[#333333] bg-[#000000]"
                 >
                   <th
                     scope="row"
-                    className="px-6 py-4 font-medium whitespace-nowrap text-white"
+                    className="whitespace-nowrap px-6 py-4 font-medium text-white"
                   >
                     {index + 1}.
                   </th>
@@ -70,7 +70,7 @@ const UsersAdminView = (props: PropTypes) => {
                   <td className="px-6 py-4">{user.email}</td>
                   <td className="px-6 py-4">{user.phone}</td>
                   <td className="px-6 py-4">{user.role}</td>
-                  <td className="flex px-6 py-4 space-x-2">
+                  <td className="flex space-x-2 px-6 py-4">
                     <Button
                       type="button"
                       variant="bg-red-800 text-sm p-2 rounded-md"

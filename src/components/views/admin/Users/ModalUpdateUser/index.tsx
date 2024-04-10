@@ -4,7 +4,6 @@ import Modal from "@/components/ui/Modal";
 import Select from "@/components/ui/Select";
 import usersServices from "@/services/users";
 import { User } from "@/types/user.type";
-import { useSession } from "next-auth/react";
 import { Dispatch, FormEvent, SetStateAction, useState } from "react";
 import { GrUserSettings } from "react-icons/gr";
 import { HiOutlineMail, HiOutlineUser } from "react-icons/hi";

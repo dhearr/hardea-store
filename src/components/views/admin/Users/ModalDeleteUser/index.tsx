@@ -2,7 +2,6 @@ import Button from "@/components/ui/Button";
 import Modal from "@/components/ui/Modal";
 import usersServices from "@/services/users";
 import { User } from "@/types/user.type";
-import { useSession } from "next-auth/react";
 import { Dispatch, SetStateAction, useState } from "react";
 import { CgDanger } from "react-icons/cg";
 
@@ -27,7 +26,7 @@ const ModalDeleteUser = (props: PropTypes) => {
   const handleDeleteUser = async () => {
     const result = await usersServices.deleteUser(
       deletedUser.id,
-      session.data?.accessToken
+      session.data?.accessToken,
     ); // Menghapus user dari server
 
     // Mengecek status permintaan
