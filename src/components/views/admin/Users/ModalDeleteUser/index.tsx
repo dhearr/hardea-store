@@ -8,19 +8,14 @@ import { CgDanger } from "react-icons/cg";
 type PropTypes = {
   deletedUser: User | any;
   setDeletedUser: Dispatch<SetStateAction<{}>>;
-  setDataUpdateUsers: Dispatch<SetStateAction<User[]>>;
+  setUsersData: Dispatch<SetStateAction<User[]>>;
   setToaster: Dispatch<SetStateAction<{}>>;
   session: any;
 };
 
 const ModalDeleteUser = (props: PropTypes) => {
-  const {
-    deletedUser,
-    setDeletedUser,
-    setDataUpdateUsers,
-    setToaster,
-    session,
-  } = props;
+  const { deletedUser, setDeletedUser, setUsersData, setToaster, session } =
+    props;
   const [isLoading, setIsLoading] = useState(false);
 
   const handleDeleteUser = async () => {
@@ -38,7 +33,7 @@ const ModalDeleteUser = (props: PropTypes) => {
       });
       setDeletedUser({});
       const { data } = await usersServices.getAllUsers(); // Mengambil data users dari server
-      setDataUpdateUsers(data.data); // Menetapkan data users ke state
+      setUsersData(data.data); // Menetapkan data users ke state
     } else {
       setIsLoading(false);
       setToaster({

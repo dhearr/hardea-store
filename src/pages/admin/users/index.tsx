@@ -5,17 +5,18 @@ import { useEffect, useState } from "react";
 const AdminUsersPage = ({ setToaster }: any) => {
   const [users, setUsers] = useState([]);
 
+  const getAllUsers = async () => {
+    const { data } = await usersServices.getAllUsers();
+    setUsers(data.data);
+  };
+
   useEffect(() => {
-    const getAllUsers = async () => {
-      const { data } = await usersServices.getAllUsers();
-      setUsers(data.data);
-    };
     getAllUsers();
   }, []);
 
   return (
     <>
-      <UsersAdminView usersData={users} setToaster={setToaster} />
+      <UsersAdminView users={users} setToaster={setToaster} />
     </>
   );
 };

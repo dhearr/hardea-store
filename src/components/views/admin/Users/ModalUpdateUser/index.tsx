@@ -12,19 +12,14 @@ import { HiDevicePhoneMobile } from "react-icons/hi2";
 type PropTypes = {
   updatedUser: User | any;
   setUpdatedUser: Dispatch<SetStateAction<{}>>;
-  setDataUpdateUsers: Dispatch<SetStateAction<User[]>>;
+  setUsersData: Dispatch<SetStateAction<User[]>>;
   setToaster: Dispatch<SetStateAction<{}>>;
   session: any;
 };
 
 const ModalUpdateUser = (props: PropTypes) => {
-  const {
-    updatedUser,
-    setUpdatedUser,
-    setDataUpdateUsers,
-    setToaster,
-    session,
-  } = props;
+  const { updatedUser, setUpdatedUser, setUsersData, setToaster, session } =
+    props;
   const [isLoading, setIsLoading] = useState(false);
 
   const handleUpdateUser = async (event: FormEvent<HTMLFormElement>) => {
@@ -39,7 +34,7 @@ const ModalUpdateUser = (props: PropTypes) => {
     const result = await usersServices.updateUser(
       updatedUser.id,
       data,
-      session.data?.accessToken
+      session.data?.accessToken,
     );
 
     // Mengecek status permintaan
@@ -47,7 +42,7 @@ const ModalUpdateUser = (props: PropTypes) => {
       setIsLoading(false);
       setUpdatedUser({});
       const { data } = await usersServices.getAllUsers(); // Mengambil data users dari server
-      setDataUpdateUsers(data.data); // Menetapkan data users ke state
+      setUsersData(data.data); // Menetapkan data users ke state
       setToaster({
         variant: "success",
         message: "User updated successfully",
@@ -63,7 +58,7 @@ const ModalUpdateUser = (props: PropTypes) => {
 
   return (
     <Modal onClose={() => setUpdatedUser({})}>
-      <h1 className="text-2xl font-bold mb-4">Edit User</h1>
+      <h1 className="mb-4 text-2xl font-bold">Edit User</h1>
       <form onSubmit={handleUpdateUser} className="flex flex-col gap-4">
         <Input
           label={<HiOutlineUser />}

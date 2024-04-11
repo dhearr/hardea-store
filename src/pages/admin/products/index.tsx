@@ -1,21 +1,21 @@
 import ProductsAdminView from "@/components/views/admin/Products";
-import usersServices from "@/services/users";
+import productsServices from "@/services/products";
 import { useEffect, useState } from "react";
 
 const AdminProductsPage = ({ setToaster }: any) => {
-  const [users, setUsers] = useState([]);
+  const [products, setProducts] = useState([]);
+  const getAllProducts = async () => {
+    const { data } = await productsServices.getAllProducts();
+    setProducts(data.data);
+  };
 
   useEffect(() => {
-    const getAllUsers = async () => {
-      const { data } = await usersServices.getAllUsers();
-      setUsers(data.data);
-    };
-    getAllUsers();
+    getAllProducts();
   }, []);
 
   return (
     <>
-      <ProductsAdminView usersData={users} setToaster={setToaster} />
+      <ProductsAdminView products={products} setToaster={setToaster} />
     </>
   );
 };
