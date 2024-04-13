@@ -10,10 +10,11 @@ type PropTypes = {
     linkUrl: string;
     icon: React.ReactNode;
   }[];
+  products?: string[];
 };
 
 const Sidebar = (props: PropTypes) => {
-  const { lists } = props;
+  const { lists, products } = props;
   const { pathname } = useRouter();
 
   return (
@@ -61,6 +62,9 @@ const Sidebar = (props: PropTypes) => {
         aria-label="Sidebar"
       >
         <div className="h-full overflow-y-auto bg-[#000000] px-3 pb-4">
+          <h1 className="mb-4 text-center text-xl font-semibold text-white">
+            {products} ({products?.length})
+          </h1>
           <ul className="space-y-2.5 font-semibold">
             {lists?.map((list, index) => (
               <li key={index}>
