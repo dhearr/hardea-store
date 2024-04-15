@@ -1,11 +1,12 @@
 import AdminLayout from "@/components/layouts/AdminLayout";
 import Button from "@/components/ui/Button";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
-import { FaTrash } from "react-icons/fa";
+import { FaPlus, FaTrash } from "react-icons/fa";
 import { BiSolidEdit } from "react-icons/bi";
 import Image from "next/image";
 import { convertIDR } from "@/utils/currency";
 import { Product } from "@/types/product.type";
+import ModalAddProduct from "./ModalAddProduct";
 
 type PropTypes = {
   products: Product[];
@@ -15,6 +16,7 @@ type PropTypes = {
 const ProductsAdminView = (props: PropTypes) => {
   const { products, setToaster } = props;
   const [productsData, setProductsData] = useState<Product[]>([]);
+  const [modalAddProduct, setModalAddProduct] = useState(false);
 
   useEffect(() => {
     setProductsData(products);
@@ -27,6 +29,18 @@ const ProductsAdminView = (props: PropTypes) => {
           <h1 className="text-2xl font-semibold text-white">
             Product Management
           </h1>
+        </div>
+        <div className="mb-5">
+          <Button
+            type="button"
+            variant="bg-green-600 flex items-center px-2 py-1.5 rounded-md text-white hover:bg-green-700"
+            onClick={() => setModalAddProduct(true)}
+          >
+            <span className="mr-2 inline-flex">
+              <FaPlus />
+            </span>
+            Add Product
+          </Button>
         </div>
         <div className="relative overflow-x-auto shadow-md sm:rounded-md">
           <table className="w-full text-center text-sm font-medium text-white">
@@ -125,6 +139,13 @@ const ProductsAdminView = (props: PropTypes) => {
           </table>
         </div>
       </AdminLayout>
+      {modalAddProduct && (
+        <ModalAddProduct
+          setToaster={setToaster}
+          setModalAddProduct={setModalAddProduct}
+          setProductsData={setProductsData}
+        />
+      )}
     </>
   );
 };

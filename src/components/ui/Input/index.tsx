@@ -7,6 +7,7 @@ type PropTypes = {
   defaultValue?: string;
   disabled?: boolean;
   variant?: string;
+  onChange?: (e: any) => void;
 };
 
 const Input = (props: PropTypes) => {
@@ -19,12 +20,13 @@ const Input = (props: PropTypes) => {
     defaultValue,
     disabled,
     variant = "bg-slate-50",
+    onChange,
   } = props;
 
   return (
     <div>
       <label
-        className={`input input-bordered ${variant} text-black/70 flex items-center gap-2`}
+        className={`input input-bordered ${variant} label:font-bold flex items-center gap-2 text-black/70`}
       >
         {label && <span>{label}</span>}
         <input
@@ -36,6 +38,7 @@ const Input = (props: PropTypes) => {
           defaultValue={defaultValue}
           disabled={disabled}
           className="grow disabled:opacity-50"
+          onChange={onChange}
         />
       </label>
     </div>

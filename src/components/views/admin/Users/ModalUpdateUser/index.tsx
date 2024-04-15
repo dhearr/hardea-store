@@ -63,7 +63,7 @@ const ModalUpdateUser = (props: PropTypes) => {
         <Input
           label={<HiOutlineUser />}
           name="fullname"
-          type="fullname"
+          type="text"
           placeholder="Fullname"
           defaultValue={updatedUser.fullname}
           disabled
@@ -79,8 +79,8 @@ const ModalUpdateUser = (props: PropTypes) => {
         <Input
           label={<HiDevicePhoneMobile />}
           name="phone"
-          type="phone"
           placeholder="Phone Number"
+          type="number"
           defaultValue={updatedUser.phone}
           disabled
         />

@@ -18,7 +18,7 @@ const Select = (props: PropTypes) => {
     <div>
       <label
         htmlFor={name}
-        className="input input-bordered bg-slate-50 text-black/70 flex items-center gap-2"
+        className="input input-bordered flex items-center gap-2 bg-slate-50 text-black/70"
       >
         {label && <span className="ml-1">{label}</span>}
 
