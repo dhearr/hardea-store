@@ -45,12 +45,12 @@ export async function retrieveDataById(collectionName: string, id: string) {
 export async function retrieveDataByField(
   collectionName: string,
   field: string,
-  value: string
+  value: string,
 ) {
   // Membuat query Firestore untuk mendapatkan dokumen berdasarkan field dan nilai yang diberikan
   const q = query(
     collection(firestore, collectionName),
-    where(field, "==", value)
+    where(field, "==", value),
   );
 
   // Mendapatkan snapshot dari hasil query
@@ -69,7 +69,7 @@ export async function retrieveDataByField(
 export async function addData(
   collectionName: string,
   data: any,
-  callback: Function
+  callback: Function,
 ) {
   // Menambahkan data ke koleksi
   await addDoc(collection(firestore, collectionName), data)
@@ -86,7 +86,7 @@ export async function updateData(
   collectionName: string,
   id: string,
   data: any,
-  callback: Function
+  callback: Function,
 ) {
   // Mengupdate data
   const docRef = doc(firestore, collectionName, id);
@@ -103,7 +103,7 @@ export async function updateData(
 export async function deleteData(
   collectionName: string,
   id: string,
-  callback: Function
+  callback: Function,
 ) {
   // Menghapus data
   const docRef = doc(firestore, collectionName, id);
@@ -117,14 +117,15 @@ export async function deleteData(
 }
 
 export async function uploadFile(
-  userid: string,
+  id: string,
   file: any,
-  callback: Function
+  newName: string,
+  collection: string,
+  callback: Function,
 ) {
   if (file) {
     if (file.size < 1048576) {
-      const newName = "profile." + file.name.split(".")[1];
-      const storageRef = ref(storage, `images/users/${userid}/${newName}`);
+      const storageRef = ref(storage, `images/${collection}/${id}/${newName}`);
       const uploadTask = uploadBytesResumable(storageRef, file);
       uploadTask.on(
         "state_changed",
@@ -139,7 +140,7 @@ export async function uploadFile(
           getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
             callback(true, downloadURL);
           });
-        }
+        },
       );
     } else {
       return callback(false);

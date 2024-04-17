@@ -37,7 +37,7 @@ const ProfileMemberView = ({
     // Mengirimkan permintaan POST ke server
     const result = await usersServices.updateProfile(
       data,
-      session.data?.accessToken
+      session.data?.accessToken,
     );
 
     // Mengecek status permintaan
@@ -59,10 +59,13 @@ const ProfileMemberView = ({
     setIsLoading("picture");
     const form = e.target as HTMLFormElement;
     const file = form.image.files[0];
+    const newName = "profile." + file.name.split(".")[1];
     if (file) {
       uploadFile(
         profile?.id,
         file,
+        newName,
+        "users",
         async (status: boolean, newImageURL: string) => {
           if (status) {
             const data = {
@@ -71,7 +74,7 @@ const ProfileMemberView = ({
             // Mengirimkan permintaan POST ke server
             const result = await usersServices.updateProfile(
               data,
-              session.data?.accessToken
+              session.data?.accessToken,
             );
 
             // Mengecek status permintaan
@@ -95,7 +98,7 @@ const ProfileMemberView = ({
               message: "Failed to update profile picture",
             });
           }
-        }
+        },
       );
     }
   };
@@ -113,7 +116,7 @@ const ProfileMemberView = ({
       // Mengirimkan permintaan POST ke server
       const result = await usersServices.updateProfile(
         data,
-        session.data?.accessToken
+        session.data?.accessToken,
       );
 
       // Mengecek status permintaan
@@ -136,13 +139,13 @@ const ProfileMemberView = ({
   return (
     <MemberLayout>
       <div className="mb-5">
-        <h1 className="text-2xl text-white font-bold">My Profile</h1>
+        <h1 className="text-2xl font-bold text-white">My Profile</h1>
       </div>
       <div className="flex gap-5">
-        <div className="w-3/12 flex flex-col justify-center items-center h-auto border bg-[#000000] shadow-lg border-[#333333] rounded-md p-5">
+        <div className="flex h-auto w-3/12 flex-col items-center justify-center rounded-md border border-[#333333] bg-[#000000] p-5 shadow-lg">
           <div className="flex items-center justify-center">
             <div className="relative">
-              <div className="w-36 h-36 overflow-hidden rounded-full">
+              <div className="h-36 w-36 overflow-hidden rounded-full">
                 <Image
                   src={profile?.image ? profile?.image : "/images/profile.jpg"}
                   alt="profile"
@@ -155,11 +158,11 @@ const ProfileMemberView = ({
           </div>
           <form
             onSubmit={handleChangeProfilePicture}
-            className="relative bg-[#161616] hover:bg-[#161616]/80 p-2 text-center text-xs mt-5 mb-10 cursor-pointer rounded-md transition duration-200 w-full"
+            className="relative mb-10 mt-5 w-full cursor-pointer rounded-md bg-[#161616] p-2 text-center text-xs transition duration-200 hover:bg-[#161616]/80"
           >
             <label htmlFor="upload-image" className="cursor-pointer">
               {changeImage.name ? (
-                <p className="text-white/70 font-semibold">
+                <p className="font-semibold text-white/70">
                   {changeImage.name}
                 </p>
               ) : (
@@ -168,9 +171,9 @@ const ProfileMemberView = ({
                     Upload a new avatar, Larger image will be resized
                     automatically.
                   </p>
-                  <p className="text-white/70 font-semibold">
+                  <p className="font-semibold text-white/70">
                     Maximum upload size is{" "}
-                    <span className="text-blue-800 font-black">1 MB</span>
+                    <span className="font-black text-blue-800">1 MB</span>
                   </p>
                 </>
               )}
@@ -179,13 +182,13 @@ const ProfileMemberView = ({
               type="file"
               name="image"
               id="upload-image"
-              className="absolute opacity-0 z-[-1]"
+              className="absolute z-[-1] opacity-0"
               onChange={(e: any) => {
                 e.preventDefault();
                 setChangeImage(e.currentTarget.files[0]);
               }}
             />
-            <div className="absolute left-0 right-0 bottom-[-45px]">
+            <div className="absolute bottom-[-45px] left-0 right-0">
               <Button
                 type="submit"
                 variant="bg-[#ededed] text-[#0a0a0a] hover:bg-[#d0d0d0] py-1.5 px-5 rounded-md transition-all w-full"
@@ -199,8 +202,8 @@ const ProfileMemberView = ({
             </div>
           </form>
         </div>
-        <div className="w-3/6 h-auto border bg-[#000000] shadow-lg border-[#333333] rounded-md p-8">
-          <h2 className="text-2xl text-white font-bold mb-3">Detail Profile</h2>
+        <div className="h-auto w-3/6 rounded-md border border-[#333333] bg-[#000000] p-8 shadow-lg">
+          <h2 className="mb-3 text-2xl font-bold text-white">Detail Profile</h2>
           <form onSubmit={handleChangeProfile} className="space-y-5">
             <Input
               label={<HiOutlineUser />}
@@ -247,8 +250,8 @@ const ProfileMemberView = ({
             </div>
           </form>
         </div>
-        <div className="w-3/12 h-auto border bg-[#000000] shadow-lg border-[#333333] rounded-md p-8">
-          <h2 className="text-2xl text-white font-bold mb-3">
+        <div className="h-auto w-3/12 rounded-md border border-[#333333] bg-[#000000] p-8 shadow-lg">
+          <h2 className="mb-3 text-2xl font-bold text-white">
             Change Password
           </h2>
           <form onSubmit={handleChangePassword} className="space-y-5">

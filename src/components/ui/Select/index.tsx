@@ -15,7 +15,7 @@ const Select = (props: PropTypes) => {
   const { label, name, options, defaultValue, disabled } = props;
 
   return (
-    <div>
+    <div className="mb-4 mt-2">
       <label
         htmlFor={name}
         className="input input-bordered flex items-center gap-2 bg-slate-50 text-black/70"

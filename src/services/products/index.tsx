@@ -4,6 +4,26 @@ import instance from "@/lib/axios/instance";
 const productsServices = {
   // Metode untuk mendapatkan semua data product
   getAllProducts: () => instance.get("/api/products"),
+
+  // Metode untuk menambahkan data product
+  addProduct: (data: any, token: string) =>
+    instance.post("/api/products", data, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }),
+
+  // Method untuk mengupdate data product
+  updateProduct: (id: string, data: any, token: string) =>
+    instance.put(
+      `/api/products/${id}`,
+      { data },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      },
+    ),
 };
 
 export default productsServices;

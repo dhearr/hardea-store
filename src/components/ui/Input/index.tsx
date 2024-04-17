@@ -24,7 +24,7 @@ const Input = (props: PropTypes) => {
   } = props;
 
   return (
-    <div>
+    <div className="mb-4 mt-2">
       <label
         className={`input input-bordered ${variant} label:font-bold flex items-center gap-2 text-black/70`}
       >
