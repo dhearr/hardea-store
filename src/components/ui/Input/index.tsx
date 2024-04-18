@@ -4,7 +4,7 @@ type PropTypes = {
   type: string;
   placeholder?: string;
   required?: boolean;
-  defaultValue?: string;
+  defaultValue?: string | number;
   disabled?: boolean;
   variant?: string;
   onChange?: (e: any) => void;

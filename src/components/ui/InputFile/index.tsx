@@ -1,4 +1,5 @@
 import { Dispatch, SetStateAction } from "react";
+import { IoCloudUploadOutline } from "react-icons/io5";
 
 type PropTypes = {
   uploadedImage: File | null;
@@ -16,6 +17,11 @@ const InputFile = (props: PropTypes) => {
           <p className="font-semibold text-black">{uploadedImage.name}</p>
         ) : (
           <>
+            <div className="mb-2 flex items-center justify-center">
+              <h1 className="text-3xl text-black/70">
+                <IoCloudUploadOutline />
+              </h1>
+            </div>
             <p className="text-black">
               Upload a new image, Larger image will be resized automatically.
             </p>

@@ -1,12 +1,13 @@
 import AdminLayout from "@/components/layouts/AdminLayout";
 import Button from "@/components/ui/Button";
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { FaPlus, FaTrash } from "react-icons/fa";
 import { BiSolidEdit } from "react-icons/bi";
 import Image from "next/image";
 import { convertIDR } from "@/utils/currency";
 import { Product } from "@/types/product.type";
 import ModalAddProduct from "./ModalAddProduct";
+import ModalUpdateProduct from "./ModalUpdateProduct ";
 
 type PropTypes = {
   products: Product[];
@@ -17,6 +18,7 @@ const ProductsAdminView = (props: PropTypes) => {
   const { products, setToaster } = props;
   const [productsData, setProductsData] = useState<Product[]>([]);
   const [modalAddProduct, setModalAddProduct] = useState(false);
+  const [updatedProduct, setUpdatedProduct] = useState<Product | {}>({});
 
   useEffect(() => {
     setProductsData(products);
@@ -76,63 +78,94 @@ const ProductsAdminView = (props: PropTypes) => {
             <tbody>
               {productsData.map((product: any, index: number) => (
                 <>
-                  <tr key={product.id} className="bg-[#000000]">
-                    <td
-                      rowSpan={product.stock.length}
-                      className="px-6 py-4 font-medium text-white"
-                    >
-                      {index + 1}.
-                    </td>
-                    <td rowSpan={product.stock.length} className="px-6 py-4">
-                      <div className="flex justify-center">
-                        <Image
-                          src={product.image}
-                          alt={product.name}
-                          width={50}
-                          height={50}
-                        />
-                      </div>
-                    </td>
-                    <td rowSpan={product.stock.length} className="px-6 py-4">
-                      {product.name}
-                    </td>
-                    <td rowSpan={product.stock.length} className="px-6 py-4">
-                      {product.category}
-                    </td>
-                    <td rowSpan={product.stock.length} className="px-6 py-4">
-                      {convertIDR(product.price)}
-                    </td>
-                    <td className="px-6 py-4">{product.stock[0].size}</td>
-                    <td className="px-6 py-4">{product.stock[0].qty}</td>
-                    <td rowSpan={product.stock.length} className="px-6 py-4">
-                      <div className="flex items-center justify-center space-x-2">
-                        <Button
-                          type="button"
-                          variant="bg-red-800 text-sm p-2 rounded-md"
-                        >
-                          <FaTrash />
-                        </Button>
-                        <Button
-                          type="button"
-                          variant="bg-blue-800 text-sm p-2 rounded-md"
-                        >
-                          <BiSolidEdit />
-                        </Button>
-                      </div>
-                    </td>
-                  </tr>
-                  {product.stock.map(
-                    (stock: { size: string; qty: number }, index: number) => (
-                      <>
-                        {index > 0 && (
-                          <tr key={stock.size} className="bg-[#000000]">
-                            <td className="px-6 py-4">{stock.size}</td>
-                            <td className="px-6 py-4">{stock.qty}</td>
+                  {product.stock
+                    .sort((a: any, b: any) => a.size.localeCompare(b.size))
+                    .map(
+                      (
+                        stock: { size: string; qty: number },
+                        stockIndex: number,
+                      ) => (
+                        <React.Fragment key={`${product.id}-${stockIndex}`}>
+                          <tr
+                            className={`${stockIndex === 0 ? "bg-[#000000]" : ""}`}
+                          >
+                            {stockIndex === 0 && (
+                              <>
+                                <td
+                                  rowSpan={product.stock.length}
+                                  className="border-b border-[#333333] px-6 py-4 font-medium text-white"
+                                >
+                                  {index + 1}.
+                                </td>
+                                <td
+                                  rowSpan={product.stock.length}
+                                  className="border-b border-[#333333] px-6 py-4"
+                                >
+                                  <div className="flex justify-center">
+                                    <Image
+                                      src={product.image}
+                                      alt={product.name}
+                                      width={50}
+                                      height={50}
+                                    />
+                                  </div>
+                                </td>
+                                <td
+                                  rowSpan={product.stock.length}
+                                  className="border-b border-[#333333] px-6 py-4"
+                                >
+                                  {product.name}
+                                </td>
+                                <td
+                                  rowSpan={product.stock.length}
+                                  className="border-b border-[#333333] px-6 py-4"
+                                >
+                                  {product.category}
+                                </td>
+                                <td
+                                  rowSpan={product.stock.length}
+                                  className="border-b border-[#333333] px-6 py-4"
+                                >
+                                  {convertIDR(product.price)}
+                                </td>
+                              </>
+                            )}
+                            <td
+                              className={`px-6 py-4 ${stockIndex === product.stock.length - 1 ? "border-b border-[#333333]" : ""} bg-[#000000]`}
+                            >
+                              {stock.size}
+                            </td>
+                            <td
+                              className={`px-6 py-4 ${stockIndex === product.stock.length - 1 ? "border-b border-[#333333]" : ""} bg-[#000000]`}
+                            >
+                              {stock.qty}
+                            </td>
+                            {stockIndex === 0 && (
+                              <td
+                                rowSpan={product.stock.length}
+                                className="border-b border-[#333333] px-6 py-4"
+                              >
+                                <div className="flex items-center justify-center space-x-2">
+                                  <Button
+                                    type="button"
+                                    variant="bg-red-800 text-sm p-2 rounded-md"
+                                  >
+                                    <FaTrash />
+                                  </Button>
+                                  <Button
+                                    type="button"
+                                    variant="bg-blue-800 text-sm p-2 rounded-md"
+                                    onClick={() => setUpdatedProduct(product)}
+                                  >
+                                    <BiSolidEdit />
+                                  </Button>
+                                </div>
+                              </td>
+                            )}
                           </tr>
-                        )}
-                      </>
-                    ),
-                  )}
+                        </React.Fragment>
+                      ),
+                    )}
                 </>
               ))}
             </tbody>
@@ -143,6 +176,14 @@ const ProductsAdminView = (props: PropTypes) => {
         <ModalAddProduct
           setToaster={setToaster}
           setModalAddProduct={setModalAddProduct}
+          setProductsData={setProductsData}
+        />
+      )}
+      {Object.keys(updatedProduct).length > 0 && (
+        <ModalUpdateProduct
+          setToaster={setToaster}
+          updatedProduct={updatedProduct}
+          setUpdatedProduct={setUpdatedProduct}
           setProductsData={setProductsData}
         />
       )}
