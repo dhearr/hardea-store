@@ -1,26 +1,27 @@
 import Button from "@/components/ui/Button";
 import Modal from "@/components/ui/Modal";
-import usersServices from "@/services/users";
-import { User } from "@/types/user.type";
+import productsServices from "@/services/products";
+import { Product } from "@/types/product.type";
+import { useSession } from "next-auth/react";
 import { Dispatch, SetStateAction, useState } from "react";
 import { CgDanger } from "react-icons/cg";
 
 type PropTypes = {
-  deletedUser: User | any;
-  setDeletedUser: Dispatch<SetStateAction<{}>>;
-  setUsersData: Dispatch<SetStateAction<User[]>>;
+  deletedProduct: Product | any;
+  setDeletedProduct: Dispatch<SetStateAction<{}>>;
+  setProductsData: Dispatch<SetStateAction<Product[]>>;
   setToaster: Dispatch<SetStateAction<{}>>;
-  session: any;
 };
 
-const ModalDeleteUser = (props: PropTypes) => {
-  const { deletedUser, setDeletedUser, setUsersData, setToaster, session } =
+const ModalDeleteProduct = (props: PropTypes) => {
+  const { deletedProduct, setDeletedProduct, setProductsData, setToaster } =
     props;
   const [isLoading, setIsLoading] = useState(false);
+  const session: any = useSession(); // Inisialisasi session
 
-  const handleDeleteUser = async () => {
-    const result = await usersServices.deleteUser(
-      deletedUser.id,
+  const handleDeleteProduct = async () => {
+    const result = await productsServices.deleteProduct(
+      deletedProduct.id,
       session.data?.accessToken,
     ); // Menghapus user dari server
 
@@ -29,32 +30,32 @@ const ModalDeleteUser = (props: PropTypes) => {
       setIsLoading(false);
       setToaster({
         variant: "success",
-        message: "User deleted successfully",
+        message: "Product deleted successfully",
       });
-      setDeletedUser({});
-      const { data } = await usersServices.getAllUsers(); // Mengambil data users dari server
-      setUsersData(data.data); // Menetapkan data users ke state
+      setDeletedProduct({});
+      const { data } = await productsServices.getAllProducts(); // Mengambil data users dari server
+      setProductsData(data.data); // Menetapkan data users ke state
     } else {
       setIsLoading(false);
       setToaster({
         variant: "danger",
-        message: "Failed to delete user",
+        message: "Failed to delete product",
       });
     }
   };
 
   return (
-    <Modal onClose={() => setDeletedUser({})} variant="w-1/3">
+    <Modal onClose={() => setDeletedProduct({})} variant="w-1/3">
       <h1 className="flex justify-center text-5xl">
         <CgDanger />
       </h1>
       <h1 className="text-center text-2xl">
-        Are you sure you want to delete this user?
+        Are you sure you want to delete this product?
       </h1>
       <div className="flex justify-between gap-5">
         <Button
           type="button"
-          onClick={() => handleDeleteUser()}
+          onClick={() => handleDeleteProduct()}
           variant="w-full bg-red-600 hover:bg-red-500 text-white rounded-md p-2 mt-4"
         >
           {isLoading ? (
@@ -65,7 +66,7 @@ const ModalDeleteUser = (props: PropTypes) => {
         </Button>
         <Button
           type="button"
-          onClick={() => setDeletedUser({})}
+          onClick={() => setDeletedProduct({})}
           variant="w-full bg-gray-600 hover:bg-gray-500 rounded-md p-2 text-white mt-4"
         >
           Cancel
@@ -75,4 +76,4 @@ const ModalDeleteUser = (props: PropTypes) => {
   );
 };
 
-export default ModalDeleteUser;
+export default ModalDeleteProduct;

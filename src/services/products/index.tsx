@@ -24,6 +24,14 @@ const productsServices = {
         },
       },
     ),
+
+  // Metode untuk delete data product
+  deleteProduct: (id: string, token: string) =>
+    instance.delete(`/api/products/${id}`, {
+      headers: {
+        Authorization: `Bearer ${token}`, // Menambahkan token ke headers
+      },
+    }),
 };
 
 export default productsServices;
