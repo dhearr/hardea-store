@@ -1,5 +1,6 @@
 import Button from "@/components/ui/Button";
 import Modal from "@/components/ui/Modal";
+import { deleteFile } from "@/lib/firebase/service";
 import productsServices from "@/services/products";
 import { Product } from "@/types/product.type";
 import { useSession } from "next-auth/react";
@@ -28,13 +29,20 @@ const ModalDeleteProduct = (props: PropTypes) => {
     // Mengecek status permintaan
     if (result.status === 200) {
       setIsLoading(false);
-      setToaster({
-        variant: "success",
-        message: "Product deleted successfully",
-      });
-      setDeletedProduct({});
-      const { data } = await productsServices.getAllProducts(); // Mengambil data users dari server
-      setProductsData(data.data); // Menetapkan data users ke state
+      deleteFile(
+        `/images/products/${deletedProduct.id}/${deletedProduct.image.split("%2F")[3].split("?")[0]}`,
+        async (status: boolean) => {
+          if (status) {
+            setToaster({
+              variant: "success",
+              message: "Product deleted successfully",
+            });
+            setDeletedProduct({});
+            const { data } = await productsServices.getAllProducts(); // Mengambil data users dari server
+            setProductsData(data.data); // Menetapkan data users ke state
+          }
+        },
+      );
     } else {
       setIsLoading(false);
       setToaster({

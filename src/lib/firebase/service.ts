@@ -12,6 +12,7 @@ import {
 } from "firebase/firestore";
 import app from "./init";
 import {
+  deleteObject,
   getDownloadURL,
   getStorage,
   ref,
@@ -146,4 +147,15 @@ export async function uploadFile(
       return callback(false);
     }
   }
+}
+
+export async function deleteFile(url: string, callback: Function) {
+  const storageRef = ref(storage, url);
+  await deleteObject(storageRef)
+    .then(() => {
+      callback(true);
+    })
+    .catch((error) => {
+      callback(false);
+    });
 }
