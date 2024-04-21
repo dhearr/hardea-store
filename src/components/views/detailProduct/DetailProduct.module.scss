@@ -1,0 +1,12 @@
+.input {
+  appearance: none;
+}
+.input:checked + .label {
+  border: 1px solid #000000;
+}
+.input:disabled + .label {
+  opacity: 0.6;
+  cursor: default;
+  background-color: #f7f7f7f7;
+  border: 1px solid rgb(209 213 219);
+}

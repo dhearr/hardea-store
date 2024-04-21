@@ -5,6 +5,9 @@ const productsServices = {
   // Metode untuk mendapatkan semua data product
   getAllProducts: () => instance.get("/api/products"),
 
+  // Metode untuk mendapatkan data product berdasarkan id
+  getDetailProduct: (id: string) => instance.get(`/api/products/${id}`),
+
   // Metode untuk menambahkan data product
   addProduct: (data: any, token: string) =>
     instance.post("/api/products", data, {

@@ -3,16 +3,16 @@ import Toaster from "@/components/ui/Toaster";
 import "@/styles/globals.css";
 import { SessionProvider } from "next-auth/react";
 import type { AppProps } from "next/app";
-import { Lato } from "next/font/google";
+import { Roboto } from "next/font/google";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
-const lato = Lato({
+const roboto = Roboto({
   subsets: ["latin"],
   weight: ["100", "300", "400", "700", "900"],
 });
 
-const disabledNavbar = ["auth", "admin", "member", "products"];
+const disabledNavbar = ["auth", "admin", "member"];
 
 export default function App({
   Component,
@@ -31,7 +31,7 @@ export default function App({
 
   return (
     <SessionProvider session={session}>
-      <div className={lato.className}>
+      <div className={roboto.className}>
         {!disabledNavbar.includes(pathname.split("/")[1]) && <Navbar />}
         <Component {...pageProps} setToaster={setToaster} />
         {Object.keys(toaster).length > 0 && (

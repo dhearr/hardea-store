@@ -19,7 +19,7 @@ const Sidebar = (props: PropTypes) => {
 
   return (
     <>
-      <nav className="fixed top-0 z-50 w-full border-b-[1px] border-[#333333] bg-[#000000]">
+      {/* <nav className="fixed top-0 z-50 w-full border-b-[1px] border-[#333333] bg-[#000000]">
         <div className="px-3 py-3 lg:px-5 lg:pl-3">
           <div className="flex items-center justify-between">
             <div className="flex items-center justify-start rtl:justify-end">
@@ -55,7 +55,7 @@ const Sidebar = (props: PropTypes) => {
             </div>
           </div>
         </div>
-      </nav>
+      </nav> */}
       <aside
         id="logo-sidebar"
         className="fixed left-0 top-0 z-40 h-screen w-64 -translate-x-full border-r-[1px] border-[#333333] bg-[#000000] pt-20 transition-transform sm:translate-x-0"
@@ -63,7 +63,7 @@ const Sidebar = (props: PropTypes) => {
       >
         <div className="h-full overflow-y-auto bg-[#000000] px-3 pb-4">
           <h1 className="mb-4 text-center text-xl font-semibold text-white">
-            {products} ({products?.length})
+            All Product ({products?.length})
           </h1>
           <ul className="space-y-2.5 font-semibold">
             {lists?.map((list, index) => (

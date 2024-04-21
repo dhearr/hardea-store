@@ -4,17 +4,13 @@ import Image from "next/image";
 
 type PropTypes = {
   product: Product;
-  key: string;
 };
 
 const Card = (props: PropTypes) => {
-  const { product, key } = props;
+  const { product } = props;
 
   return (
-    <div
-      key={key}
-      className="card h-96 max-w-xl rounded-md bg-[#000000] shadow-xl"
-    >
+    <div className="card h-96 max-w-xl rounded-md bg-[#000000] shadow-xl">
       <figure>
         <Image
           src={product.image}

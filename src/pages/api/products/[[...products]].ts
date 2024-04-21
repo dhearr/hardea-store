@@ -2,6 +2,7 @@ import {
   addData,
   deleteData,
   retrieveData,
+  retrieveDataById,
   updateData,
 } from "@/lib/firebase/service";
 import type { NextApiRequest, NextApiResponse } from "next";
@@ -12,10 +13,19 @@ export default async function handler(
   res: NextApiResponse,
 ) {
   if (req.method === "GET") {
-    const data = await retrieveData("products");
-    res
-      .status(200)
-      .json({ status: true, statusCode: 200, message: "success", data });
+    const { products }: any = req.query;
+
+    if (products && products[0]) {
+      const data = await retrieveDataById("products", products[0]);
+      res
+        .status(200)
+        .json({ status: true, statusCode: 200, message: "success", data });
+    } else {
+      const data = await retrieveData("products");
+      res
+        .status(200)
+        .json({ status: true, statusCode: 200, message: "success", data });
+    }
   } else if (req.method === "POST") {
     const token = req.headers.authorization?.split(" ")[1] || "";
     jwt.verify(
