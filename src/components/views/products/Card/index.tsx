@@ -10,21 +10,16 @@ const Card = (props: PropTypes) => {
   const { product } = props;
 
   return (
-    <div className="card h-96 max-w-xl rounded-md bg-[#000000] shadow-xl">
-      <figure>
-        <Image
-          src={product.image}
-          alt={product.name}
-          width={500}
-          height={500}
-        />
-      </figure>
-      <div className="card-body">
-        <h2 className="card-title text-white">{product.name}</h2>
-        <div className="badge badge-outline badge-sm rounded-md text-white">
+    <div className="card h-96 max-w-xl">
+      <Image src={product.image} alt={product.name} width={500} height={500} />
+      <div className="px-1 py-2">
+        <h2 className="mt-2 font-semibold text-[#111111]">{product.name}</h2>
+        <div className="font-semobold mb-5 text-[#626262]">
           {product.category}
         </div>
-        <h3 className="mt-3 text-white">{convertIDR(product.price)}</h3>
+        <h3 className="mb-3 font-semibold text-[#111111]">
+          {convertIDR(product.price)}
+        </h3>
       </div>
     </div>
   );

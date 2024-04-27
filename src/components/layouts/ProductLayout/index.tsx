@@ -21,7 +21,7 @@ const ProductLayout = (props: PropTypes) => {
   return (
     <>
       <Sidebar lists={listSidebarItem} products={products} />
-      <section className="min-h-screen bg-[#111111]">
+      <section className="min-h-screen">
         <div className="p-4 sm:ml-64">
           <div className="mt-14 p-4">{children}</div>
         </div>

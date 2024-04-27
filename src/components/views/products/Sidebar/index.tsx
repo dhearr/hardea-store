@@ -19,50 +19,9 @@ const Sidebar = (props: PropTypes) => {
 
   return (
     <>
-      {/* <nav className="fixed top-0 z-50 w-full border-b-[1px] border-[#333333] bg-[#000000]">
-        <div className="px-3 py-3 lg:px-5 lg:pl-3">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center justify-start rtl:justify-end">
-              <button
-                data-drawer-target="logo-sidebar"
-                data-drawer-toggle="logo-sidebar"
-                aria-controls="logo-sidebar"
-                type="button"
-                className="flex items-center rounded-lg p-2 text-3xl text-gray-500 sm:hidden"
-              >
-                <span className="inline-flex">
-                  <HiMenuAlt2 />
-                </span>
-              </button>
-              <Link href="/">
-                <h1 className="ml-3 hidden text-3xl font-bold text-[#ededed] sm:block">
-                  Hardea<span className="text-sm">.Store</span>
-                </h1>
-              </Link>
-            </div>
-            <div className="flex items-center">
-              <div className="ms-3 flex items-center">
-                <div>
-                  <Button
-                    type="button"
-                    onClick={() => signOut()}
-                    variant="bg-[#ededed] text-[#0a0a0a] hover:bg-[#d0d0d0] py-1 px-5 rounded-md transition-all"
-                  >
-                    Logout
-                  </Button>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </nav> */}
-      <aside
-        id="logo-sidebar"
-        className="fixed left-0 top-0 z-40 h-screen w-64 -translate-x-full border-r-[1px] border-[#333333] bg-[#000000] pt-20 transition-transform sm:translate-x-0"
-        aria-label="Sidebar"
-      >
-        <div className="h-full overflow-y-auto bg-[#000000] px-3 pb-4">
-          <h1 className="mb-4 text-center text-xl font-semibold text-white">
+      <aside className="fixed left-0 top-0 z-0 h-screen w-64 -translate-x-full pt-20 transition-transform sm:translate-x-0">
+        <div className="h-full overflow-y-auto px-3 pb-4">
+          <h1 className="mb-8 text-center text-xl font-semibold text-black">
             All Product ({products?.length})
           </h1>
           <ul className="space-y-2.5 font-semibold">
@@ -70,22 +29,13 @@ const Sidebar = (props: PropTypes) => {
               <li key={index}>
                 <Link
                   href={list.linkUrl}
-                  className={`group flex items-center p-2 ${
+                  className={`group p-2 ${
                     pathname === list.linkUrl
-                      ? "rounded-md bg-[#161616] text-white"
+                      ? "rounded-md text-black"
                       : "text-[#626262]"
-                  } rounded-md transition-all duration-200 hover:bg-[#161616] hover:text-white`}
+                  } rounded-md transition-all duration-200 hover:text-[#626262]`}
                 >
-                  <div
-                    className={`flex h-6 w-6 items-center justify-center text-[22px] ${
-                      pathname === list.linkUrl
-                        ? "text-white"
-                        : "text-[#626262]"
-                    } transition-all duration-200 group-hover:text-white`}
-                  >
-                    {list.icon}
-                  </div>
-                  <span className="ml-3">{list.title}</span>
+                  {list.title}
                 </Link>
               </li>
             ))}

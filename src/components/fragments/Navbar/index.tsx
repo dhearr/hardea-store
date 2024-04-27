@@ -7,10 +7,10 @@ const Navbar = () => {
   const { data } = useSession();
 
   return (
-    <nav className="sticky z-10 bg-black backdrop-blur-lg top-0 flex py-2.5 px-16 items-center justify-between border-b-2 border-[#333333] back">
-      <div className="flex items-center h-100">
+    <nav className="fixed top-0 z-10 flex w-full items-center justify-between border-b-2 border-[#333333] bg-black px-16 py-2.5 backdrop-blur-lg">
+      <div className="h-100 flex items-center">
         <Link href="/">
-          <h1 className="text-3xl font-bold mr-12 text-[#ededed]">
+          <h1 className="mr-12 text-3xl font-bold text-[#ededed]">
             Hardea<span className="text-sm">.Store</span>
           </h1>
         </Link>
