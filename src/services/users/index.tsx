@@ -14,7 +14,7 @@ const usersServices = {
         headers: {
           Authorization: `Bearer ${token}`, // Menambahkan token ke headers
         },
-      }
+      },
     ),
 
   // Metode untuk delete data user
@@ -42,7 +42,27 @@ const usersServices = {
         headers: {
           Authorization: `Bearer ${token}`, // Menambahkan token ke headers
         },
-      }
+      },
+    ),
+
+  // Metode untuk mendapatkan data keranjang
+  getCart: (token: string) =>
+    instance.get("/api/users/cart", {
+      headers: {
+        Authorization: `Bearer ${token}`, // Menambahkan token ke headers
+      },
+    }),
+
+  // Metode untuk menambahkan data ke keranjang
+  addToCart: (data: any, token: string) =>
+    instance.put(
+      "/api/users/cart",
+      { data },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`, // Menambahkan token ke headers
+        },
+      },
     ),
 };
 

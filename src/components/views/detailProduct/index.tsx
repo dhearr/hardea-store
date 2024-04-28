@@ -3,13 +3,70 @@ import { convertIDR } from "@/utils/currency";
 import Image from "next/image";
 import styles from "./DetailProduct.module.scss";
 import Button from "@/components/ui/Button";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/router";
+import { Dispatch, SetStateAction, useState } from "react";
+import usersServices from "@/services/users";
 
 type PropTypes = {
   product: Product | any;
+  cart: any;
+  productId: string | string[] | undefined;
+  setToaster: Dispatch<SetStateAction<{}>>;
 };
 
 const DetailProductView = (props: PropTypes) => {
-  const { product } = props;
+  const { product, cart, productId, setToaster } = props;
+  const { status, data: session }: any = useSession();
+  const router = useRouter();
+  const [selectSize, setSelectSize] = useState("");
+
+  const handleAddToCart = async () => {
+    if (selectSize !== "") {
+      let newCart = [];
+      if (
+        cart.filter(
+          (item: any) => item.id === productId && item.size === selectSize,
+        ).length > 0
+      ) {
+        newCart = cart.map((item: any) => {
+          if (item.id === productId && item.size === selectSize) {
+            item.qty += 1;
+          }
+          return item;
+        });
+      } else {
+        newCart = [
+          ...cart,
+          {
+            id: productId,
+            qty: 1,
+            size: selectSize,
+          },
+        ];
+      }
+      try {
+        const result = await usersServices.addToCart(
+          {
+            carts: newCart,
+          },
+          session?.accessToken,
+        );
+        if (result.status === 200) {
+          setSelectSize("");
+          setToaster({
+            variant: "success",
+            message: "Added to cart success",
+          });
+        }
+      } catch (error) {
+        setToaster({
+          variant: "danger",
+          message: "Failed to add to cart",
+        });
+      }
+    }
+  };
 
   return (
     <div className="flex gap-10 px-[20vw] py-[20vh]">
@@ -36,6 +93,8 @@ const DetailProductView = (props: PropTypes) => {
                 id={`size-${item.size}`}
                 className={styles.input}
                 disabled={item.qty === 0}
+                onClick={() => setSelectSize(item.size)}
+                checked={selectSize === item.size}
               />
               <label
                 htmlFor={`size-${item.size}`}
@@ -47,8 +106,13 @@ const DetailProductView = (props: PropTypes) => {
           ))}
         </div>
         <Button
-          type="button"
+          type={status === "authenticated" ? "submit" : "button"}
           variant="mt-5 w-full bg-black rounded-md p-4 text-white"
+          onClick={() => {
+            status === "unauthenticated"
+              ? router.push(`/auth/login?callbackUrl=${router.asPath}`)
+              : handleAddToCart();
+          }}
         >
           Add to Cart
         </Button>
