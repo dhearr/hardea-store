@@ -8,6 +8,7 @@ type PropTypes = {
   disabled?: boolean;
   variant?: string;
   onChange?: (e: any) => void;
+  toggle?: React.ReactNode;
 };
 
 const Input = (props: PropTypes) => {
@@ -21,6 +22,7 @@ const Input = (props: PropTypes) => {
     disabled,
     variant = "bg-slate-50",
     onChange,
+    toggle,
   } = props;
 
   return (
@@ -40,6 +42,7 @@ const Input = (props: PropTypes) => {
           className="grow disabled:opacity-50"
           onChange={onChange}
         />
+        <span className="cursor-pointer">{toggle}</span>
       </label>
     </div>
   );

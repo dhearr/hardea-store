@@ -6,6 +6,7 @@ import { useRouter } from "next/router";
 import { Dispatch, FormEvent, SetStateAction, useState } from "react";
 import { HiOutlineKey, HiOutlineMail } from "react-icons/hi";
 import { HiDevicePhoneMobile, HiOutlineUser } from "react-icons/hi2";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 type PropTypes = {
   setToaster: Dispatch<SetStateAction<{}>>;
@@ -14,6 +15,7 @@ type PropTypes = {
 const RegisterView = ({ setToaster }: PropTypes) => {
   // State untuk menangani loading, dan router
   const [isLoading, setIsLoading] = useState(false); // State untuk menangani status loading
+  const [showPassword, setShowPassword] = useState(false); // State untuk menampilkan password
   const { push } = useRouter(); // Menggunakan hook useRouter untuk mendapatkan objek router
 
   // Fungsi untuk menangani proses registrasi
@@ -89,9 +91,16 @@ const RegisterView = ({ setToaster }: PropTypes) => {
         <Input
           label={<HiOutlineKey />}
           name="password"
-          type="password"
+          type={showPassword ? "text" : "password"}
           placeholder="Password"
           required
+          toggle={
+            showPassword ? (
+              <FaEye onClick={() => setShowPassword(false)} />
+            ) : (
+              <FaEyeSlash onClick={() => setShowPassword(true)} />
+            )
+          }
         />
         <Button
           disabled={isLoading}

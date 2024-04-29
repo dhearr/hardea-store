@@ -5,6 +5,7 @@ import { signIn } from "next-auth/react";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import { Dispatch, FormEvent, SetStateAction, useState } from "react";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { HiOutlineKey, HiOutlineMail } from "react-icons/hi";
 
 type PropTypes = {
@@ -14,6 +15,7 @@ type PropTypes = {
 const LoginView = ({ setToaster }: PropTypes) => {
   // State untuk menangani loading, dan router
   const [isLoading, setIsLoading] = useState(false); // State untuk menangani status loading
+  const [showPassword, setShowPassword] = useState(false); // State untuk menampilkan password
   const { push, query } = useRouter(); // Menggunakan hook useRouter untuk mendapatkan informasi tentang router
 
   // Mendapatkan callbackUrl dari query atau default "/"
@@ -76,8 +78,15 @@ const LoginView = ({ setToaster }: PropTypes) => {
         <Input
           label={<HiOutlineKey />}
           name="password"
-          type="password"
+          type={showPassword ? "text" : "password"}
           placeholder="Password"
+          toggle={
+            showPassword ? (
+              <FaEye onClick={() => setShowPassword(false)} />
+            ) : (
+              <FaEyeSlash onClick={() => setShowPassword(true)} />
+            )
+          }
           required
         />
         <Button
@@ -104,7 +113,7 @@ const LoginView = ({ setToaster }: PropTypes) => {
           <Image
             src="/images/google.png"
             alt="google"
-            className="w-6 h-6 mr-3"
+            className="mr-3 h-6 w-6"
             width={200}
             height={200}
           />
