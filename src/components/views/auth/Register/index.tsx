@@ -7,6 +7,7 @@ import { Dispatch, FormEvent, SetStateAction, useState } from "react";
 import { HiOutlineKey, HiOutlineMail } from "react-icons/hi";
 import { HiDevicePhoneMobile, HiOutlineUser } from "react-icons/hi2";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
+import { styles } from "./Register.module";
 
 type PropTypes = {
   setToaster: Dispatch<SetStateAction<{}>>;
@@ -66,7 +67,7 @@ const RegisterView = ({ setToaster }: PropTypes) => {
       linkText="Already have an account? Sign In"
       setToaster={setToaster}
     >
-      <form className="space-y-4 md:space-y-6" onSubmit={handleRegister}>
+      <form className={styles.form} onSubmit={handleRegister}>
         <Input
           label={<HiOutlineUser />}
           name="fullname"
@@ -105,11 +106,11 @@ const RegisterView = ({ setToaster }: PropTypes) => {
         <Button
           disabled={isLoading}
           type="submit"
-          variant="w-full p-2.5 rounded-lg bg-green-600 hover:bg-green-700 text-white"
+          variant={styles.form__button}
         >
           {/* Tampilan tombol saat loading */}
           {isLoading ? (
-            <span className="loading loading-spinner loading-sm"></span>
+            <span className={styles.form__button__loading}></span>
           ) : (
             "Register"
           )}

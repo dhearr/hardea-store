@@ -7,6 +7,7 @@ import { useRouter } from "next/router";
 import { Dispatch, FormEvent, SetStateAction, useState } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { HiOutlineKey, HiOutlineMail } from "react-icons/hi";
+import { styles } from "./Login.module";
 
 type PropTypes = {
   setToaster: Dispatch<SetStateAction<{}>>;
@@ -67,7 +68,7 @@ const LoginView = ({ setToaster }: PropTypes) => {
       linkText="Don't have an account? Sign Up "
       setToaster={setToaster}
     >
-      <form className="space-y-4 md:space-y-6" onSubmit={handleLogin}>
+      <form className={styles.form} onSubmit={handleLogin}>
         <Input
           label={<HiOutlineMail />}
           name="email"
@@ -92,11 +93,11 @@ const LoginView = ({ setToaster }: PropTypes) => {
         <Button
           disabled={isLoading}
           type="submit"
-          variant="w-full p-2.5 rounded-lg bg-green-700 hover:bg-green-600 text-white"
+          variant={styles.form__button}
         >
           {/* Tampilan tombol saat loading */}
           {isLoading ? (
-            <span className="loading loading-spinner loading-sm"></span>
+            <span className={styles.form__button__laoding}></span>
           ) : (
             "Login"
           )}
@@ -107,13 +108,13 @@ const LoginView = ({ setToaster }: PropTypes) => {
       <Button
         type="button"
         onClick={() => signIn("google", { callbackUrl, redirect: false })}
-        variant="w-full p-2.5 flex items-center justify-center rounded-lg bg-blue-700 hover:bg-blue-600 text-white"
+        variant={styles.button__google}
       >
         <span className="inline-flex">
           <Image
             src="/images/google.png"
             alt="google"
-            className="mr-3 h-6 w-6"
+            className={styles.button__google__icon}
             width={200}
             height={200}
           />

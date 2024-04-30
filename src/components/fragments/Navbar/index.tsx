@@ -1,25 +1,52 @@
 import Button from "@/components/ui/Button";
 import { signIn, signOut, useSession } from "next-auth/react";
 import Link from "next/link";
+import { styles } from "./Navbar.module";
+import Image from "next/image";
+import { useEffect, useState } from "react";
 
 const Navbar = () => {
-  // Menggunakan hook useSession untuk mendapatkan data sesi pengguna.
   const { data } = useSession();
+  const [image, setImage] = useState("/images/profile.jpg");
+
+  useEffect(() => {
+    const storedSessionString = localStorage.getItem("session");
+    const storedSession = storedSessionString
+      ? JSON.parse(storedSessionString)
+      : null;
+
+    const userImage = storedSession || "/images/profile.jpg";
+    setImage(userImage);
+  }, []);
+
+  const handleSignOut = () => {
+    localStorage.removeItem("session");
+    signOut();
+  };
 
   return (
-    <nav className="fixed top-0 z-10 flex w-full items-center justify-between border-b-2 border-[#333333] bg-black px-16 py-2.5 backdrop-blur-lg">
-      <div className="h-100 flex items-center">
+    <nav className={styles.navbar}>
+      <div className={styles.logo}>
         <Link href="/">
-          <h1 className="mr-12 text-3xl font-bold text-[#ededed]">
+          <h1 className={styles.logo__title}>
             Hardea<span className="text-sm">.Store</span>
           </h1>
         </Link>
       </div>
-      <div className="flex gap-4">
-        <div className="flex items-center">
+      <div className={styles.navbar__main}>
+        {data && (
+          <Image
+            src={image}
+            alt="profile"
+            width={40}
+            height={40}
+            className={styles.navbar__main__image}
+          />
+        )}
+        <div>
           <Button
             type="button"
-            onClick={() => (data ? signOut() : signIn())}
+            onClick={() => (data ? handleSignOut() : signIn())}
             variant="bg-[#ededed] text-[#0a0a0a] hover:bg-[#d0d0d0] py-1 px-5 rounded-md transition-all"
           >
             {data ? "Logout" : "Login"}
@@ -31,10 +58,3 @@ const Navbar = () => {
 };
 
 export default Navbar;
-
-{
-  /* <button onClick={() => (data ? signOut() : signIn())} className="btn">
-          {data ? "Logout" : "Login"}
-        </button>
-      </div> */
-}

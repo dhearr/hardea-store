@@ -81,6 +81,11 @@ const ProfileMemberView = ({
             if (result.status === 200) {
               setIsLoading("");
               setProfile({ ...profile, image: newImageURL });
+              session.data.user.image = newImageURL;
+              localStorage.setItem(
+                "session",
+                JSON.stringify(session.data.user.image),
+              );
               setChangeImage({});
               form.reset();
               setToaster({
