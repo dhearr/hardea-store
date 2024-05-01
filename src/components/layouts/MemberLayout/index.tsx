@@ -4,6 +4,7 @@ import {
   MdShoppingCart,
   MdSpaceDashboard,
 } from "react-icons/md";
+import { styles } from "./MemberLayout.module";
 
 type PropTypes = {
   children: React.ReactNode;
@@ -33,9 +34,9 @@ const MemberLayout = (props: PropTypes) => {
   return (
     <>
       <Sidebar lists={listSidebarItem} />
-      <section className="bg-[#111111] min-h-screen">
-        <div className="p-4 sm:ml-64">
-          <div className="p-4 mt-14">{children}</div>
+      <section className={styles.memberlayout}>
+        <div className={styles.memberlayout__main}>
+          <div className={styles.memberlayout__main__content}>{children}</div>
         </div>
       </section>
     </>

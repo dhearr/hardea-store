@@ -1,6 +1,7 @@
 import Sidebar from "@/components/fragments/Sidebar";
 import { FaUsers } from "react-icons/fa";
 import { MdShoppingBag, MdSpaceDashboard } from "react-icons/md";
+import { styles } from "./AdminLayout.module";
 
 type PropTypes = {
   children: React.ReactNode;
@@ -30,9 +31,9 @@ const AdminLayout = (props: PropTypes) => {
   return (
     <>
       <Sidebar lists={listSidebarItem} />
-      <section className="bg-[#111111] min-h-screen">
-        <div className="p-4 sm:ml-64">
-          <div className="p-4 mt-14">{children}</div>
+      <section className={styles.adminlayout}>
+        <div className={styles.adminlayout__main}>
+          <div className={styles.adminlayout__main__content}>{children}</div>
         </div>
       </section>
     </>

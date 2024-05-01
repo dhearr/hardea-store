@@ -12,7 +12,7 @@ const roboto = Roboto({
   weight: ["100", "300", "400", "700", "900"],
 });
 
-const disabledNavbar = ["auth", "admin", "member"];
+const disabledNavbar = ["auth"];
 
 export default function App({
   Component,

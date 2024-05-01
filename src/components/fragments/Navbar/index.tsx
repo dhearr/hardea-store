@@ -6,7 +6,7 @@ import Image from "next/image";
 import { useEffect, useState } from "react";
 
 const Navbar = () => {
-  const { data } = useSession();
+  const { data: sessionData } = useSession();
   const [image, setImage] = useState("/images/profile.jpg");
 
   useEffect(() => {
@@ -15,9 +15,10 @@ const Navbar = () => {
       ? JSON.parse(storedSessionString)
       : null;
 
-    const userImage = storedSession || "/images/profile.jpg";
+    const userImage =
+      storedSession || sessionData?.user?.image || "/images/profile.jpg";
     setImage(userImage);
-  }, []);
+  }, [sessionData]);
 
   const handleSignOut = () => {
     localStorage.removeItem("session");
@@ -34,7 +35,7 @@ const Navbar = () => {
         </Link>
       </div>
       <div className={styles.navbar__main}>
-        {data && (
+        {sessionData && (
           <Image
             src={image}
             alt="profile"
@@ -43,15 +44,13 @@ const Navbar = () => {
             className={styles.navbar__main__image}
           />
         )}
-        <div>
-          <Button
-            type="button"
-            onClick={() => (data ? handleSignOut() : signIn())}
-            variant="bg-[#ededed] text-[#0a0a0a] hover:bg-[#d0d0d0] py-1 px-5 rounded-md transition-all"
-          >
-            {data ? "Logout" : "Login"}
-          </Button>
-        </div>
+        <Button
+          type="button"
+          onClick={() => (sessionData ? handleSignOut() : signIn())}
+          variant={styles.navbar__main__button}
+        >
+          {sessionData ? "Logout" : "Login"}
+        </Button>
       </div>
     </nav>
   );

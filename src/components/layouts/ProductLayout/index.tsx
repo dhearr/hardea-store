@@ -1,6 +1,6 @@
 import Sidebar from "@/components/views/products/Sidebar";
-import { FaUsers } from "react-icons/fa";
-import { MdShoppingBag, MdSpaceDashboard } from "react-icons/md";
+import { MdSpaceDashboard } from "react-icons/md";
+import { styles } from "./ProductLayout";
 
 type PropTypes = {
   children: React.ReactNode;
@@ -21,9 +21,9 @@ const ProductLayout = (props: PropTypes) => {
   return (
     <>
       <Sidebar lists={listSidebarItem} products={products} />
-      <section className="min-h-screen">
-        <div className="p-4 sm:ml-64">
-          <div className="mt-14 p-4">{children}</div>
+      <section className={styles.productlayout}>
+        <div className={styles.productlayout__main}>
+          <div className={styles.productlayout__main__content}>{children}</div>
         </div>
       </section>
     </>
