@@ -1,3 +1,5 @@
+import { styles } from "./Input.module";
+
 type PropTypes = {
   label?: React.ReactNode;
   name: string;
@@ -26,10 +28,8 @@ const Input = (props: PropTypes) => {
   } = props;
 
   return (
-    <div className="mb-4 mt-2">
-      <label
-        className={`input input-bordered ${variant} label:font-bold flex items-center gap-2 text-black/70`}
-      >
+    <div className={styles.container}>
+      <label className={`${styles.container__label} ${variant}`}>
         {label && <span>{label}</span>}
         <input
           id={name}
@@ -39,10 +39,10 @@ const Input = (props: PropTypes) => {
           required={required}
           defaultValue={defaultValue}
           disabled={disabled}
-          className="grow disabled:opacity-50"
+          className={styles.container__label__input}
           onChange={onChange}
         />
-        <span className="cursor-pointer">{toggle}</span>
+        <span className={styles.container__label__input__toggle}>{toggle}</span>
       </label>
     </div>
   );

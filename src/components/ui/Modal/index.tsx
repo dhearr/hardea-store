@@ -1,4 +1,5 @@
 import { useEffect, useRef } from "react";
+import { styles } from "./Modal.module";
 
 type PropTypes = {
   children: React.ReactNode;
@@ -22,10 +23,10 @@ const Modal = (props: PropTypes) => {
   }, [onClose]);
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center overflow-y-auto overflow-x-hidden outline-none">
-      <div className="fixed inset-0 bg-black opacity-75"></div>
+    <div className={styles.modal}>
+      <div className={styles.modal__background}></div>
       <div
-        className={`relative z-50 max-h-[80vh] ${variant} overflow-y-auto rounded-lg bg-white p-8`}
+        className={`${styles.modal__main} ${variant}`}
         ref={ref}
         style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
       >

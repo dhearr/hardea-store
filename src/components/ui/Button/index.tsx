@@ -1,3 +1,5 @@
+import { styles } from "./Button.module";
+
 type PropTypes = {
   type: "submit" | "button" | "reset" | undefined;
   onClick?: () => void;
@@ -14,7 +16,7 @@ const Button = (props: PropTypes) => {
       disabled={disabled}
       type={type}
       onClick={onClick}
-      className={`${variant} transition-all transform-gpu active:scale-[.98]`}
+      className={`${variant} ${styles.button}`}
     >
       {children}
     </button>

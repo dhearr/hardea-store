@@ -1,8 +1,5 @@
-import Button from "@/components/ui/Button";
-import { signOut } from "next-auth/react";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { HiMenuAlt2 } from "react-icons/hi";
 
 type PropTypes = {
   lists: {

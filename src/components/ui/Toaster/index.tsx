@@ -5,6 +5,7 @@ import {
   IoMdCheckmarkCircle,
 } from "react-icons/io";
 import { IoClose } from "react-icons/io5";
+import { styles } from "./Toaster.module";
 
 type PropTypes = {
   variant: string;
@@ -53,28 +54,28 @@ const Toaster = (props: PropTypes) => {
   }, []);
 
   return (
-    <div className="fixed bottom-0 left-1/2 z-[9999] mb-4 flex w-full max-w-xs -translate-x-1/2 transform items-center overflow-hidden rounded-md bg-white p-4 shadow-lg">
+    <div className={styles.toaster}>
       <div
-        className={`inline-flex h-8 w-8 flex-shrink-0 items-center justify-center text-[24px] ${ToasterVariant[variant].barColor} ${ToasterVariant[variant].iconColor} rounded-md`}
+        className={`${styles.toaster__icon} ${ToasterVariant[variant].barColor} ${ToasterVariant[variant].iconColor}`}
       >
         {ToasterVariant[variant].icon}
       </div>
-      <div className="ms-3 max-w-xs">
-        <p className="text-md font-bold">{ToasterVariant[variant].title}</p>
-        <p className="text-sm font-normal">{message}</p>
+      <div className={styles.toaster__main}>
+        <p className={styles.toaster__main__title}>
+          {ToasterVariant[variant].title}
+        </p>
+        <p className={styles.toaster__main__title__message}>{message}</p>
       </div>
       <button
         type="button"
-        className="-mx-1.5 -my-1.5 ms-auto p-1.5"
+        className={styles.toaster__close}
         onClick={() => setToaster({})}
       >
         <IoClose />
       </button>
-      <div
-        className={`absolute h-1.5 w-full ${ToasterVariant[variant].bgBarColor} bottom-0 left-0`}
-      >
+      <div className={`${styles.bar} ${ToasterVariant[variant].bgBarColor}`}>
         <div
-          className={`h-1.5 ${ToasterVariant[variant].barColor}`}
+          className={`${styles.bar__main} ${ToasterVariant[variant].barColor}`}
           style={{ width: `${lengthBar}%` }}
         />
       </div>
