@@ -84,12 +84,15 @@ const ModalAddProduct = (props: PropTypes) => {
     event.preventDefault();
     setIsLoading(true);
     const form: any = event.target as HTMLFormElement;
+    const stock = stockCount.map((stock) => {
+      return { size: stock.size, qty: parseInt(`${stock.qty}`) };
+    });
     const data = {
       name: form.name.value,
-      price: form.price.value,
+      price: parseInt(form.price.value),
       category: form.category.value,
       status: form.status.value,
-      stock: stockCount,
+      stock: stock,
       image: "",
     };
     const result = await productsServices.addProduct(
@@ -164,8 +167,8 @@ const ModalAddProduct = (props: PropTypes) => {
           Stock
         </label>
         {stockCount.map((item: { size: string; qty: number }, i: number) => (
-          <div className="flex w-full gap-x-4 gap-y-4" key={i}>
-            <div className="w-full">
+          <div className="flex w-full justify-between gap-y-4" key={i}>
+            <div className="w-[45%]">
               <label htmlFor="size" className="text-sm">
                 Size
               </label>
@@ -178,7 +181,7 @@ const ModalAddProduct = (props: PropTypes) => {
                 }}
               />
             </div>
-            <div className="w-full">
+            <div className="w-[45%]">
               <label htmlFor="qty" className="text-sm">
                 Quantity
               </label>

@@ -17,6 +17,7 @@ const ProductDetailPage = (props: PropTypes) => {
   const session: any = useSession();
   const [product, setProduct] = useState<Product | {}>({});
   const [cart, setCart] = useState([]);
+  console.log(cart);
 
   const getDetailProduct = async (id: string) => {
     const { data } = await productsServices.getDetailProduct(id);

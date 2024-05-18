@@ -16,7 +16,7 @@ type PropTypes = {
 };
 
 const DetailProductView = (props: PropTypes) => {
-  const { product, cart, productId, setToaster } = props;
+  const { product, cart = [], productId, setToaster } = props;
   const { status, data: session }: any = useSession();
   const router = useRouter();
   const [selectSize, setSelectSize] = useState("");
@@ -25,7 +25,7 @@ const DetailProductView = (props: PropTypes) => {
     if (selectSize !== "") {
       let newCart = [];
       if (
-        cart.filter(
+        cart?.filter(
           (item: any) => item.id === productId && item.size === selectSize,
         ).length > 0
       ) {
