@@ -3,16 +3,16 @@ import Toaster from "@/components/ui/Toaster";
 import "@/styles/globals.css";
 import { SessionProvider } from "next-auth/react";
 import type { AppProps } from "next/app";
-import { Poppins } from "next/font/google";
+import { Montserrat } from "next/font/google";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
-const roboto = Poppins({
+const roboto = Montserrat({
   subsets: ["latin"],
   weight: ["100", "300", "400", "500", "700", "900"],
 });
 
-const disabledNavbar = ["auth"];
+const disabledNavbar = ["auth", "admin"];
 
 export default function App({
   Component,

@@ -3,7 +3,7 @@ import { styles } from "./Button.module";
 type PropTypes = {
   type: "submit" | "button" | "reset" | undefined;
   onClick?: () => void;
-  children: React.ReactNode;
+  children?: React.ReactNode;
   disabled?: boolean | undefined;
   variant?: string;
 };
